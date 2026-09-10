@@ -110,31 +110,25 @@ class TelemetryEvents
      */
     public static function track(string $eventType, string $eventSubType = '', array $fields = [], $context = null): void
     {
-        if (!TelemetryClient::isEnabled()) {
-            return;
-        }
-
         try {
-            self::doTrack($eventType, $eventSubType, $fields, $context);
+            if (!TelemetryClient::isEnabled()) {
+                return;
+            }
+
+            self::$buffer[] = self::buildEvent($eventType, $eventSubType, $fields, $context);
+
+            if (count(self::$buffer) >= self::EVENT_CAP) {
+                self::flush();
+                return;
+            }
+
+            if (!self::$shutdownRegistered) {
+                self::$shutdownRegistered = true;
+                add_action('shutdown', [self::class, 'flush'], 100);
+            }
         } catch (Throwable $t) {
             DupLog::traceException($t, 'Telemetry track() failed, event dropped: ' . $eventType);
         }
-    }
-
-    /**
-     * Internal worker for {@see track()}. Kept separate so the public entry
-     * point is a thin never-throwing wrapper.
-     *
-     * @param string               $eventType    Event family
-     * @param string               $eventSubType Outcome/variant within the family
-     * @param array<string, mixed> $fields       Typed fields for this event type
-     * @param mixed                $context      Optional source object for the enrichment filter
-     *
-     * @return void
-     */
-    private static function doTrack(string $eventType, string $eventSubType, array $fields, $context): void
-    {
-        self::bufferEvent(self::buildEvent($eventType, $eventSubType, $fields, $context));
     }
 
     /**
@@ -159,28 +153,6 @@ class TelemetryEvents
         $event['fields'] = $fields;
 
         return $event;
-    }
-
-    /**
-     * Buffer an already normalized event.
-     *
-     * @param array<string, mixed> $event Event produced by buildEvent()
-     *
-     * @return void
-     */
-    private static function bufferEvent(array $event): void
-    {
-        self::$buffer[] = $event;
-
-        if (count(self::$buffer) >= self::EVENT_CAP) {
-            self::flush();
-            return;
-        }
-
-        if (!self::$shutdownRegistered) {
-            self::$shutdownRegistered = true;
-            add_action('shutdown', [self::class, 'flush'], 100);
-        }
     }
 
     /**
@@ -215,25 +187,30 @@ class TelemetryEvents
      */
     public static function sendBatch(array $events, string $batchType = '', string $operationId = '', int $part = 0): bool
     {
-        if (empty($events) || count($events) > self::EVENT_CAP || !TelemetryClient::isEnabled()) {
+        try {
+            if (empty($events) || count($events) > self::EVENT_CAP || !TelemetryClient::isEnabled()) {
+                return false;
+            }
+
+            $envelope                     = TelemetrySnapshot::collectIdentity();
+            $envelope['protocol_version'] = TelemetryClient::PROTOCOL_VERSION;
+            $envelope['plugin_version']   = DUPLICATOR_VERSION;
+            $envelope['timestamp']        = gmdate('c');
+            $envelope                     = array_merge($envelope, TelemetrySnapshot::collectEnvironment());
+            if ($batchType !== '') {
+                $envelope['batch_type'] = $batchType;
+            }
+            if ($operationId !== '') {
+                $envelope['operation_id']   = $operationId;
+                $envelope['operation_part'] = $part;
+            }
+            $envelope['events'] = $events;
+
+            return TelemetryClient::post(TelemetryClient::ROUTE_EVENTS, $envelope);
+        } catch (Throwable $e) {
+            DupLog::traceException($e, 'Telemetry event batch failed.');
             return false;
         }
-
-        $envelope                     = TelemetrySnapshot::collectIdentity();
-        $envelope['protocol_version'] = TelemetryClient::PROTOCOL_VERSION;
-        $envelope['plugin_version']   = DUPLICATOR_VERSION;
-        $envelope['timestamp']        = gmdate('c');
-        $envelope                     = array_merge($envelope, TelemetrySnapshot::collectEnvironment());
-        if ($batchType !== '') {
-            $envelope['batch_type'] = $batchType;
-        }
-        if ($operationId !== '') {
-            $envelope['operation_id']   = $operationId;
-            $envelope['operation_part'] = $part;
-        }
-        $envelope['events'] = $events;
-
-        return TelemetryClient::post(TelemetryClient::ROUTE_EVENTS, $envelope);
     }
 
     /**
@@ -249,19 +226,23 @@ class TelemetryEvents
      */
     public static function onPluginActivated($oldVariant, $oldVersion, $newVariant, string $newVersion): void
     {
-        if (!TelemetryClient::isEnabled()) {
-            return;
+        try {
+            if (!TelemetryClient::isEnabled()) {
+                return;
+            }
+
+            $payload = self::buildPluginActivatedPayload($oldVersion, $newVersion, (string) $oldVariant, $newVariant);
+            $subType = $payload['activation_type'];
+            unset($payload['activation_type']);
+
+            if (!self::canSendLifecycleEvent($subType)) {
+                return;
+            }
+
+            self::track('plugin_activation', $subType, $payload);
+        } catch (Throwable $e) {
+            DupLog::traceException($e, 'Telemetry activation event failed.');
         }
-
-        $payload = self::buildPluginActivatedPayload($oldVersion, $newVersion, (string) $oldVariant, $newVariant);
-        $subType = $payload['activation_type'];
-        unset($payload['activation_type']);
-
-        if (!self::canSendLifecycleEvent($subType)) {
-            return;
-        }
-
-        self::track('plugin_activation', $subType, $payload);
     }
 
     /**
@@ -381,10 +362,14 @@ class TelemetryEvents
      */
     public static function onMigrationComplete(MigrateData $data): void
     {
-        $payload = self::buildMigrationCompletePayload($data);
-        $subType = $payload['install_type'];
-        unset($payload['install_type']);
-        self::track('migration', $subType, $payload);
+        try {
+            $payload = self::buildMigrationCompletePayload($data);
+            $subType = $payload['install_type'];
+            unset($payload['install_type']);
+            self::track('migration', $subType, $payload);
+        } catch (Throwable $e) {
+            DupLog::traceException($e, 'Telemetry migration event failed.');
+        }
     }
 
     /**

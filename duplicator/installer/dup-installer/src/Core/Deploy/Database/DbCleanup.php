@@ -164,7 +164,7 @@ class DbCleanup
         if (!$overwriteData['packagesTableExists']) {
             // Clean current package only if is extracted from backup
             $packagesTable = mysqli_real_escape_string($dbh, DUPX_DB_Functions::getPackagesTableName());
-            DUPX_DB::mysqli_query($dbh, 'DELETE FROM `' . $packagesTable . '` WHERE `id` = ' . $packageId);
+            DUPX_DB::mysqli_query($dbh, 'DELETE FROM `' . $packagesTable . '` WHERE `id` = ' . (int) $packageId);
         }
     }
 

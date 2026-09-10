@@ -377,6 +377,9 @@ trait TraitPackageBuild
                 if (($straight_ratio < 0.90) || ($straight_ratio > 1.01)) {
                     // Has to exceed both the straight as well as the warning ratios
                     if (($warning_ratio < 0.90) || ($warning_ratio > 1.01)) {
+                        $userMessage = $this->Archive->file_count < $expected_filecount
+                            ? __('The backup archive has fewer files than expected and may be incomplete.', 'duplicator')
+                            : __('The backup archive has more files than expected and may be inconsistent.', 'duplicator');
                         throw new DupliException(
                             sprintf(
                                 'File count in archive vs expected suggests a bad archive (%1$d vs %2$d).',
@@ -384,7 +387,7 @@ trait TraitPackageBuild
                                 $expected_filecount
                             ),
                             DupliException::CODE_INTEGRITY_FILE_COUNT_MISMATCH,
-                            __('The backup archive has fewer files than expected and may be incomplete.', 'duplicator')
+                            $userMessage
                         );
                     }
                 }

@@ -8,7 +8,6 @@ namespace Duplicator\Core;
 
 use Duplicator\Models\GlobalEntity;
 use Duplicator\Utils\Logging\DupLog;
-use Duplicator\Utils\Logging\ErrorHandler;
 use Duplicator\Core\MigrationMng;
 use Duplicator\Package\ClientSideKick;
 use Duplicator\Package\DupPackage;
@@ -163,9 +162,6 @@ class Bootstrap
      */
     public static function initialChecks(): void
     {
-        // Must run before any package or trace file I/O.
-        ErrorHandler::init();
-
         $exception = null;
         try {
             // Only start the Backup runner and tracing once it's been confirmed that everything has been installed

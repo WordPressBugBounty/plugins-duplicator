@@ -60,7 +60,7 @@ class PackageArchiveZip
             );
         }
 
-        PackageUtils::safeTmpCleanup(true);
+        PackageUtils::purgeTempArchives();
         if ($this->package->requireBuildOptions()->getZipArchiveMode() == PackageArchive::ZIP_MODE_SINGLE_THREAD) {
             return $this->createSingleThreaded();
         } else {
@@ -430,45 +430,43 @@ class PackageArchiveZip
                         $zip_is_open = true;
                     }
 
-                    //NON-ASCII check
-                    if (preg_match('/[^\x20-\x7f]/', $absoluteFile)) {
-                        if (!$this->isUTF8FileSafe($absoluteFile)) {
-                            $this->package->logSkippedItem('File', $absoluteFile, 'file path cannot be read');
-                            $this->package->addSkippedFilesBuildWarning();
-                            continue;
-                        }
+                    $fileSize    = 0;
+                    $fileSkipped = false;
+                    if (preg_match('/[^\x20-\x7f]/', $absoluteFile) && !$this->isUTF8FileSafe($absoluteFile)) {
+                        $this->package->logSkippedItem('File', $absoluteFile, 'file path cannot be read');
+                        $this->package->addSkippedFilesBuildWarning();
+                        $fileSkipped = true;
                     } elseif (!file_exists($absoluteFile)) {
                         $this->package->logSkippedItem('File', $absoluteFile, 'file does not exist');
                         $this->package->addSkippedFilesBuildWarning();
-                        continue;
-                    }
-
-                    $file_size  = filesize($absoluteFile);
-                    $zip_status = $this->zipArchive->addFile($absoluteFile, $relativeFile);
-
-                    if ($zip_status) {
-                        $total_file_size                       += $file_size;
-                        $incremental_file_size                 += $file_size;
-                        $buildProgress->processed_archive_size += $file_size;
+                        $fileSkipped = true;
                     } else {
-                        $this->package->logSkippedItem('File', $absoluteFile, 'could not be added to the zip');
-                        $this->package->addSkippedFilesBuildWarning();
+                        $fileSize = (int) filesize($absoluteFile);
+                        if ($this->zipArchive->addFile($absoluteFile, $relativeFile)) {
+                            $total_file_size       += $fileSize;
+                            $incremental_file_size += $fileSize;
+                        } else {
+                            $this->package->logSkippedItem('File', $absoluteFile, 'could not be added to the zip');
+                            $this->package->addSkippedFilesBuildWarning();
+                            $fileSkipped = true;
+                        }
                     }
 
                     $countFiles++;
                     $chunk_size_in_bytes = $global->getZipArchiveChunkSize() * 1000000;
-                    if ($incremental_file_size > $chunk_size_in_bytes) {
+                    if (!$fileSkipped && $incremental_file_size > $chunk_size_in_bytes) {
                         // Only close because of chunk size and file descriptors when in legacy mode
                         DupLog::trace(
                             "closing zip because ziparchive mode = {$this->package->requireBuildOptions()->getZipArchiveMode()}
                             fd count = $used_zip_file_descriptor_count or
                             incremental file size=$incremental_file_size and chunk size = $chunk_size_in_bytes"
                         );
-                        $incremental_file_size          = 0;
                         $used_zip_file_descriptor_count = 0;
                         if ($this->zipArchive->close() == true) {
+                            $buildProgress->processed_archive_size += $incremental_file_size;
                             $buildProgress->next_archive_file_index = $countFiles;
                             $buildProgress->retries                 = 0;
+                            $incremental_file_size                  = 0;
                             $this->package->update();
                             $lastProgressUpdate = microtime(true);
                             $zip_is_open        = false;
@@ -508,7 +506,7 @@ class PackageArchiveZip
 
                     //MT: MAX BUILD TIME (MINUTES)
                     //Only stop to check on larger files above 100K to avoid checking every single file
-                    if ($file_size > $this->maxBuildTimeFileSize && $this->optMaxBuildTimeOn) {
+                    if ($fileSize > $this->maxBuildTimeFileSize && $this->optMaxBuildTimeOn) {
                         $elapsed_minutes = (time() - $this->package->timer_start) / 60;
                         if ($elapsed_minutes > $global->getMaxPackageRuntime()) {
                             throw new DupliException(
@@ -528,6 +526,7 @@ class PackageArchiveZip
                 DupLog::trace("Doing final zip close after adding $incremental_file_size");
                 if ($this->zipArchive->close()) {
                     DupLog::trace("Final zip closed.");
+                    $buildProgress->processed_archive_size += $incremental_file_size;
                     $buildProgress->next_archive_file_index = $countFiles;
                     $buildProgress->retries                 = 0;
                     $this->package->update();

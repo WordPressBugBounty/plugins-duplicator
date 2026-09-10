@@ -1648,7 +1648,7 @@ abstract class AbstractPackageDeployer
             return;
         }
 
-        if (($files = scandir(DUPLICATOR_DEPLOY_PATH)) === false) {
+        if (($files = SnapIO::callWithPhpErrorCapture(static fn() => scandir(DUPLICATOR_DEPLOY_PATH))) === false) {
             DupLog::trace("Couldn't get list of files in " . DUPLICATOR_DEPLOY_PATH);
             return;
         }
@@ -1656,11 +1656,11 @@ abstract class AbstractPackageDeployer
         foreach ($files as $file) {
             $filepath = DUPLICATOR_DEPLOY_PATH . "/{$file}";
             DupLog::trace("checking {$filepath}");
-            if (!is_file($filepath) || $file == 'index.php') {
+            if (!is_file($filepath) || $file == 'index.php' || !SnapIO::isOlderThan($filepath, Constants::DEPLOY_CLEANUP_SECS)) {
                 continue;
             }
-            if (filemtime($filepath) <= time() - Constants::DEPLOY_CLEANUP_SECS) {
-                @unlink($filepath);
+            if (!SnapIO::unlink($filepath)) {
+                DupLog::trace("Couldn't remove deploy file: " . $filepath);
             }
         }
     }

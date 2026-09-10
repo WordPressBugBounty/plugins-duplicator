@@ -53,46 +53,6 @@ jQuery(document).ready(function ($) {
 
 /***/ },
 
-/***/ 721
-/*!**************************************************!*\
-  !*** ./addons/litebase/assets/js/dismissable.js ***!
-  \**************************************************/
-() {
-
-jQuery(function ($) {
-    $(document).on('click', '.dupli-dismissable-dismiss', function (e) {
-        e.preventDefault();
-
-        var $root = $(this).closest('.dupli-dismissable');
-        if ($root.length === 0) {
-            return;
-        }
-
-        var action = $root.data('dismiss-action');
-        var nonce  = $root.data('dismiss-nonce');
-        if (!action || !nonce) {
-            return;
-        }
-
-        DupliJs.Util.ajaxWrapper(
-            { action: action, nonce: nonce },
-            function () { return ''; },
-            null,
-            { showProgress: false }
-        );
-
-        var $tr = $root.closest('tr');
-        if ($tr.length > 0) {
-            $tr.remove();
-        } else {
-            $root.hide().remove();
-        }
-    });
-});
-
-
-/***/ },
-
 /***/ 48
 /*!******************************************************!*\
   !*** ./addons/litebase/assets/js/email-subscribe.js ***!
@@ -363,21 +323,18 @@ let __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _connect_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./connect.js */ 251);
 /* harmony import */ var _connect_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_connect_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _dismissable_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./dismissable.js */ 721);
-/* harmony import */ var _dismissable_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_dismissable_js__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _email_subscribe_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./email-subscribe.js */ 48);
-/* harmony import */ var _email_subscribe_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_email_subscribe_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _extra_plugins_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./extra-plugins.js */ 218);
-/* harmony import */ var _extra_plugins_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_extra_plugins_js__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _welcome_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./welcome.js */ 357);
-/* harmony import */ var _welcome_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_welcome_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _email_subscribe_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./email-subscribe.js */ 48);
+/* harmony import */ var _email_subscribe_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_email_subscribe_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _extra_plugins_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./extra-plugins.js */ 218);
+/* harmony import */ var _extra_plugins_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_extra_plugins_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _welcome_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./welcome.js */ 357);
+/* harmony import */ var _welcome_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_welcome_js__WEBPACK_IMPORTED_MODULE_3__);
 /**
  * Main script for the LiteBase addon.
  *
  * Bundles all per-feature scripts into a single litebase[.min].js artifact,
  * mirroring the pattern used by the main plugin entry (assets/js/main.js).
  */
-
 
 
 

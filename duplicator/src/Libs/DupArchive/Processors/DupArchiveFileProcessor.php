@@ -78,16 +78,25 @@ class DupArchiveFileProcessor
     ): void {
         DupArchiveUtil::tlog("writeFileToArchive for {$sourceFilepath}");
 
-        // switching to straight call for speed
-        $sourceHandle = @fopen($sourceFilepath, 'rb');
+        // Preserve the source-open warning so skipped-file diagnostics retain the filesystem reason.
+        $sourceHandle = SnapIO::callWithPhpErrorCapture(static fn() => fopen($sourceFilepath, 'rb'));
 
         if (!is_resource($sourceHandle)) {
+            $openError                      = error_get_last();
+            $openReason                     = is_array($openError)
+                ? $openError['message']
+                : 'reason unavailable';
             $createState->archiveOffset     = SnapIO::ftell($archiveHandle);
             $createState->currentFileOffset = 0;
             $createState->currentFileIndex++;
             $createState->currentFileHeaderWritten = false;
             $createState->skippedFileCount++;
-            $createState->addFailure(DupArchiveProcessingFailure::TYPE_FILE, $sourceFilepath, "Couldn't open $sourceFilepath", false);
+            $createState->addFailure(
+                DupArchiveProcessingFailure::TYPE_FILE,
+                $sourceFilepath,
+                "Couldn't open source file: {$openReason}",
+                false
+            );
             return;
         }
 

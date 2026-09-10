@@ -53,6 +53,12 @@ final class AutoTuneManager
      */
     const ATTEMPT_RECORD_PRIORITY = 90;
 
+    /** @var int Extra lock attempts when an attempt outcome must be recorded */
+    const OUTCOME_LOCK_RETRIES = 2;
+
+    /** @var int Seconds between outcome lock attempts */
+    const OUTCOME_LOCK_RETRY_DELAY = 5;
+
     const STOP_SUCCESS              = 'success';
     const STOP_FAILURE_NOT_TUNABLE  = 'failure_not_tunable';
     const STOP_CANDIDATES_EXHAUSTED = 'candidates_exhausted';
@@ -252,8 +258,25 @@ final class AutoTuneManager
         }
 
         $lock = self::createLock();
-        if (!$lock->lock()) {
-            DupLog::trace('AUTOTUNE: advance SKIP | lock busy');
+        $lock->lock();
+        // An outcome must not be lost because a recovery tick holds the lock: wait and retry.
+        for ($retry = 0; $retry < self::OUTCOME_LOCK_RETRIES; $retry++) {
+            if ($lock->isLocked() || $recordStep === null || $lock->getStatus() !== SqlLock::STATUS_BUSY) {
+                break;
+            }
+            DupLog::trace('AUTOTUNE: advance lock busy, retrying in ' . self::OUTCOME_LOCK_RETRY_DELAY . ' seconds');
+            sleep(self::OUTCOME_LOCK_RETRY_DELAY);
+            $lock->lock();
+        }
+        if (!$lock->isLocked()) {
+            if ($lock->getStatus() === SqlLock::STATUS_BUSY) {
+                DupLog::infoTrace('AUTOTUNE: advance SKIP | lock busy');
+            } else {
+                DupLog::infoTrace(
+                    'AUTOTUNE: advance SKIP | lock error | '
+                    . ($lock->getLastLockError() ?? 'unknown SQL lock failure')
+                );
+            }
             return;
         }
 

@@ -250,20 +250,18 @@ class LiteBase extends AbstractAddonCore
      * Enqueue addon CSS.
      *
      * The global stylesheet (sidebar entry, plugins-row link, dashboard
-     * widget) is loaded site-wide. The Duplicator-pages stylesheet (button
-     * overrides etc.) is loaded only on Duplicator admin pages and declares
-     * dupli-main as a dependency so WordPress always prints it after core
-     * CSS, allowing it to override Foundation button styles.
+     * widget) is loaded site-wide. The full script bundle and page stylesheet
+     * are loaded only on Duplicator admin pages.
      *
      * @return void
      */
     public static function enqueueStyles(): void
     {
         wp_enqueue_style('dupli-addon-litebase-global');
-        wp_enqueue_script('dupli-addon-litebase');
 
         if (ControllersManager::getInstance()->isDuplicatorPage()) {
             wp_enqueue_style('dupli-addon-litebase');
+            wp_enqueue_script('dupli-addon-litebase');
         }
     }
 

@@ -26,7 +26,13 @@ class ScanNodeInfo extends FileNodeInfo
         $hash  = '';
 
         if (is_link($path)) {
-            $type = is_dir($path) ? self::TYPE_LINK_DIR : self::TYPE_LINK_FILE;
+            if (is_dir($path)) {
+                $type = self::TYPE_LINK_DIR;
+            } elseif (is_file($path)) {
+                $type = self::TYPE_LINK_FILE;
+            } else {
+                $nodes = 0;
+            }
         } elseif (is_file($path)) {
             $type  = self::TYPE_FILE;
             $size  = (int) @filesize($path);

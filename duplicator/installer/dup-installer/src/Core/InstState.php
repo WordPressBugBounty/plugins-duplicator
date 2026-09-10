@@ -791,7 +791,7 @@ class InstState
         $result->restoreBackupMode   = self::isRestoreBackup();
         $result->recoveryMode        = self::isRecoveryMode();
         $result->archivePath         = $sec->getArchivePath();
-        $result->packageId           = $ac->packInfo->packageId;
+        $result->packageId           = is_numeric($ac->packInfo->packageId) ? (int) $ac->packInfo->packageId : 0;
         $result->packageHash         = $ac->packInfo->packageHash;
         $result->installerPath       = $sec->getBootFilePath();
         $result->installerBootLog    = $sec->getBootLogFile();

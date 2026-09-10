@@ -421,7 +421,7 @@ class MigrationMng
         foreach ($filesToCheck as $file) {
             $fileName = basename($file);
 
-            if ($fileTimeDelay > 0  && (time() - filemtime($file)) < $fileTimeDelay) {
+            if ($fileTimeDelay > 0 && !SnapIO::isOlderThan($file, $fileTimeDelay)) {
                 continue;
             }
 

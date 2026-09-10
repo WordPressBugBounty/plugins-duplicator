@@ -139,7 +139,7 @@ class PackageUtils
             },
             'FIND_IN_SET(\'' . DupPackage::FLAG_CREATED_AFTER_RESTORE . '\', `flags`) OR
             (
-                `id` > ' .  $migrationData->packageId . ' AND
+                `id` > ' . (int) $migrationData->packageId . ' AND
                 `created` < \'' . esc_sql($migrationData->installTime) . '\'
             )'
         );
@@ -395,35 +395,37 @@ class PackageUtils
     }
 
     /**
-     * Safe tmp cleanup
-     *
-     * @param bool $purgeTempArchives if true purge temp archives
+     * Remove leftover partial archive files from the tmp directory
      *
      * @return void
      */
-    public static function safeTmpCleanup(bool $purgeTempArchives = false): void
+    public static function purgeTempArchives(): void
     {
-        if ($purgeTempArchives) {
-            $dir = DUPLICATOR_SSDIR_PATH_TMP . "/*_archive.zip.*";
-            foreach (glob($dir) as $file_path) {
-                unlink($file_path);
-            }
-            $dir = DUPLICATOR_SSDIR_PATH_TMP . "/*_archive.daf.*";
-            foreach (glob($dir) as $file_path) {
-                unlink($file_path);
-            }
-        } else {
-            $dir   = DUPLICATOR_SSDIR_PATH_TMP . "/*";
-            $files = glob($dir);
-            if ($files !== false) {
-                foreach ($files as $file_path) {
-                    if (basename($file_path) === 'index.php') {
-                        continue;
-                    }
-                    if (filemtime($file_path) <= time() - Constants::TEMP_CLEANUP_SECONDS) {
-                        SnapIO::rrmdir($file_path);
-                    }
+        foreach (['zip', 'daf'] as $extension) {
+            $pattern = DUPLICATOR_SSDIR_PATH_TMP . "/*_archive.{$extension}.*";
+            $files   = SnapIO::callWithPhpErrorCapture(static fn() => glob($pattern));
+            foreach ($files ?: [] as $path) {
+                if (!SnapIO::unlink($path)) {
+                    DupLog::trace('Could not remove temporary archive: ' . $path);
                 }
+            }
+        }
+    }
+
+    /**
+     * Remove tmp directory entries older than the cleanup threshold
+     *
+     * @return void
+     */
+    public static function safeTmpCleanup(): void
+    {
+        $files = SnapIO::callWithPhpErrorCapture(static fn() => glob(DUPLICATOR_SSDIR_PATH_TMP . '/*'));
+        foreach ($files ?: [] as $path) {
+            if (basename($path) === 'index.php' || !SnapIO::isOlderThan($path, Constants::TEMP_CLEANUP_SECONDS)) {
+                continue;
+            }
+            if (!SnapIO::rrmdir($path)) {
+                DupLog::trace('Could not remove temporary file: ' . $path);
             }
         }
     }

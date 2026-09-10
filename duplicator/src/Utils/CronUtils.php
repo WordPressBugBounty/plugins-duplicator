@@ -6,6 +6,7 @@ use Duplicator\Models\GlobalEntity;
 use Duplicator\Utils\Logging\DupLog;
 use Duplicator\Models\ActivityLog\LogUtils;
 use Duplicator\Package\AbstractPackage;
+use Duplicator\Package\AutoTune\AutoTuneSessionEntity;
 use Duplicator\Package\DupPackage;
 use Duplicator\Package\PackageUtils;
 use Duplicator\Package\Runner;
@@ -227,6 +228,11 @@ class CronUtils
     public static function failedBackupCleanupCron(): void
     {
         global $wpdb;
+
+        if (AutoTuneSessionEntity::getInstance()->isRunning()) {
+            DupLog::trace("Failed backup cleanup cron skipped: AutoTune session running");
+            return;
+        }
 
         DupLog::trace("Running failed backup cleanup cron job");
 

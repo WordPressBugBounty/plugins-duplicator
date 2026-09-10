@@ -6,6 +6,7 @@ use Duplicator\Ajax\ServicesPackage;
 use Duplicator\Core\CapMng;
 use Duplicator\Libs\Snap\SnapUtil;
 use Duplicator\Package\AutoTune\AutoTuneManager;
+use Duplicator\Package\AutoTune\AutoTuneSessionEntity;
 use Duplicator\Package\DupPackage;
 use Duplicator\Utils\Logging\DupLog;
 use Throwable;
@@ -85,6 +86,9 @@ class PackagesPageActions
             DupLog::trace("set {$backup->getId()} for cancel");
             $backup->setForCancel();
             $success = true;
+        } elseif (AutoTuneSessionEntity::getInstance()->isRunning()) {
+            DupLog::trace("Hard delete of $packageId skipped: AutoTune session running");
+            return ['errorMessage' => __('Backups cannot be removed while an AutoTune session is running.', 'duplicator')];
         } else {
             DupLog::trace("Could not find Backup so attempting hard delete.");
             $success = DupPackage::forceDelete($packageId);

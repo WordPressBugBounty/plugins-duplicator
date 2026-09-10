@@ -6,7 +6,6 @@
  */
 
 import './connect.js';
-import './dismissable.js';
 import './email-subscribe.js';
 import './extra-plugins.js';
 import './welcome.js';

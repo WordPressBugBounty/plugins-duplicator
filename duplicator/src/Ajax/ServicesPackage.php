@@ -580,6 +580,13 @@ class ServicesPackage extends AbstractAjaxService
             }
 
             if ($package == null && $stopActive !== true) {
+                if (AutoTuneSessionEntity::getInstance()->isRunning()) {
+                    DupLog::trace("Hard delete of $packageId skipped: AutoTune session running");
+                    return [
+                        'success' => false,
+                        'message' => __('Backups cannot be removed while an AutoTune session is running.', 'duplicator'),
+                    ];
+                }
                 DupLog::trace(
                     "Could not find Backup so attempting hard delete.
                     Old files may end up sticking around although chances are there isnt much if we couldnt nicely cancel it."

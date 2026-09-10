@@ -64,7 +64,7 @@ class PackageDupArchive
         $done = false;
 
         DupArchiveEngine::init(new Logger(), WpArchiveUtils::getTargetRootPath());
-        PackageUtils::safeTmpCleanup(true);
+        PackageUtils::purgeTempArchives();
         $compressDir = SnapIO::untrailingslashit(WpArchiveUtils::getTargetRootPath());
         $archivePath = SnapIO::safePath("{$package->StorePath}/{$archive->getFileName()}");
         $filterDirs  = empty($archive->FilterDirs)  ? 'not set' : rtrim(str_replace(';', "\n\t", $archive->FilterDirs));

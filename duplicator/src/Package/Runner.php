@@ -485,9 +485,17 @@ final class Runner
 
             DupLog::trace('KICKOFF: SERVER side - ' . $ajax_url);
             LockUtil::unlockProcess();
-            wp_remote_get($ajax_url, $args);
 
+            // Arm the safety net before the loopback so the worker is covered even if the request is lost.
             wp_schedule_single_event(time() + 5, self::KICKOFF_FALLBACK_CRON_HOOK);
+            if (wp_next_scheduled(self::KICKOFF_FALLBACK_CRON_HOOK) === false) {
+                DupLog::infoTrace('KICKOFF: fallback cron event could not be scheduled');
+            }
+
+            $response = wp_remote_get($ajax_url, $args);
+            if (is_wp_error($response)) {
+                DupLog::infoTrace('KICKOFF: loopback request failed (' . $response->get_error_code() . ')');
+            }
         }
     }
 

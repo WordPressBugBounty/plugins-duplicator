@@ -89,7 +89,22 @@ class UpgradePlugin
     public static function getStoredInstallInfo()
     {
         $installInfo = get_option(self::DUP_INSTALL_INFO_OPT_KEY, false);
-        return apply_filters('duplicator_stored_install_info', $installInfo);
+        $installInfo = apply_filters('duplicator_stored_install_info', $installInfo);
+        if (is_array($installInfo)) {
+            $storedInstallInfo = $installInfo;
+
+            // Legacy scalar options were migrated without restoring their integer type.
+            foreach (['time', 'updateTime'] as $key) {
+                if (isset($installInfo[$key])) {
+                    $installInfo[$key] = (int) $installInfo[$key];
+                }
+            }
+
+            if ($installInfo !== $storedInstallInfo) {
+                update_option(self::DUP_INSTALL_INFO_OPT_KEY, $installInfo, false);
+            }
+        }
+        return $installInfo;
     }
 
     /**

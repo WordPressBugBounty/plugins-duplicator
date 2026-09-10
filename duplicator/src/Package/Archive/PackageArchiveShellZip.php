@@ -44,15 +44,15 @@ class PackageArchiveShellZip
                 'Shell zip process was interrupted; archive build did not complete.',
                 DupliException::CODE_SHELL_ZIP_RETRY_EXHAUSTED,
                 __(
-                    'Your hosting provider stopped the zip process before the archive could finish,
-                    usually due to server resource limits.
+                    'The zip process did not complete during the previous request.
+                    This can happen when the server interrupts the process or the request ends unexpectedly.
                     Switching to a different archive engine is recommended for better stability.',
                     'duplicator'
                 )
             );
         }
 
-        PackageUtils::safeTmpCleanup(true);
+        PackageUtils::purgeTempArchives();
         $compressDir  = SnapIO::untrailingslashit(WpArchiveUtils::getTargetRootPath());
         $zipPath      = SnapIO::safePath("{$package->StorePath}/{$archive->getFileName()}");
         $filterDirs   = empty($archive->FilterDirs) ? 'not set' : rtrim(str_replace(';', "\n\t", $archive->FilterDirs));

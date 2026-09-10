@@ -7,7 +7,9 @@ namespace Duplicator\Utils\UsageStatistics\Telemetry;
 use Duplicator\Core\UniqueId;
 use Duplicator\Libs\Snap\SnapUtil;
 use Duplicator\Libs\WpUtils\WpDbUtils;
+use Duplicator\Utils\Logging\DupLog;
 use Duplicator\Utils\UsageStatistics\StatsUtil;
+use Throwable;
 
 /**
  * Builds the telemetry snapshot from core data and addon enrichment filters.
@@ -240,15 +242,21 @@ class TelemetrySnapshot
      */
     public static function send(): bool
     {
-        if (!TelemetryClient::isEnabled()) {
-            return false;
-        }
-        if (!TelemetryClient::post(TelemetryClient::ROUTE_SNAPSHOT, self::collect())) {
-            return false;
-        }
+        try {
+            if (!TelemetryClient::isEnabled()) {
+                return false;
+            }
 
-        TelemetryState::getInstance()->markSnapshotSent();
-        return true;
+            if (!TelemetryClient::post(TelemetryClient::ROUTE_SNAPSHOT, self::collect())) {
+                return false;
+            }
+
+            TelemetryState::getInstance()->markSnapshotSent();
+            return true;
+        } catch (Throwable $e) {
+            DupLog::traceException($e, 'Telemetry snapshot send failed.');
+            return false;
+        }
     }
 
     /**

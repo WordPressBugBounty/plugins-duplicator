@@ -157,7 +157,9 @@ abstract class ChunkingManager
             }
 
             if (($this->maxIteration && $this->itCount >= $this->maxIteration) || $this->checkTimeout()) {
-                $this->stop();
+                if ($this->stop() === false) {
+                    return self::CHUNK_ERROR;
+                }
                 return self::CHUNK_STOP;
             }
         }

@@ -12,6 +12,33 @@ jQuery(document).ready(function ($) {
         });
     });
 
+    $(document).on('click', '.dupli-dismissable-dismiss', function (event) {
+        event.preventDefault();
+
+        var $root = $(this).closest('.dupli-dismissable');
+        if ($root.length === 0) {
+            return;
+        }
+
+        var action = $root.data('dismiss-action');
+        var nonce = $root.data('dismiss-nonce');
+        if (!action || !nonce) {
+            return;
+        }
+
+        $.post(dupli_global_data.ajaxurl, {
+            action: action,
+            nonce: nonce
+        });
+
+        var $row = $root.closest('tr');
+        if ($row.length > 0) {
+            $row.remove();
+        } else {
+            $root.hide().remove();
+        }
+    });
+
     $(document).on('click', '.dupli-quick-fix-notice .dupli-quick-fix', function () {
         var $button = $(this),
             $notice = $button.closest('.dupli-quick-fix-notice'),

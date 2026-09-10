@@ -124,7 +124,7 @@ class DupLog
     public static function infoTrace(string $msg): void
     {
         self::info($msg);
-        self::writeTrace($msg, SnapUtil::getCallingFunctionName());
+        self::writeTrace($msg);
     }
 
     /**
@@ -188,7 +188,7 @@ class DupLog
         $err_msg .= "TRACE:\n{$source}";
         $err_msg .= "====================================================================\n\n";
         self::info($err_msg);
-        self::writeTrace($err_msg, SnapUtil::getCallingFunctionName());
+        self::writeTrace($err_msg);
     }
 
     /**
@@ -257,33 +257,42 @@ class DupLog
     /**
      * Write trace log
      *
-     * @param string $message         The message to add to the active trace
-     * @param string $callingFunction Override the calling function name
+     * @param string     $message   The message to add to the active trace
+     * @param ?Throwable $exception Optional exception to append
      *
      * @return void
      */
     protected static function writeTrace(
         string $message,
-        string $callingFunction
+        ?Throwable $exception = null
     ): void {
-        static $unique_id = null;
+        try {
+            static $unique_id = null;
 
-        if (!self::isTraceEnabled()) {
-            return;
+            if ($exception !== null) {
+                $message = ($message === '' ? '' : $message . "\n") . SnapLog::getTextException($exception);
+            }
+
+            if (!self::isTraceEnabled()) {
+                return;
+            }
+
+            if ($unique_id === null) {
+                $remotePort  = SnapUtil::sanitizeIntInput(INPUT_SERVER, 'REMOTE_PORT', -1);
+                $remotePort  = $remotePort > 0 ? $remotePort : '';
+                $requestTime = SnapUtil::sanitizeIntInput(INPUT_SERVER, 'REQUEST_TIME', -1);
+                $requestTime = $requestTime > 0 ? $requestTime : '';
+                $remoteAddr  = SnapUtil::sanitizeTextInput(INPUT_SERVER, 'REMOTE_ADDR', '');
+                $unique_id   = sprintf("%08x", abs(crc32($remoteAddr . $requestTime . $remotePort)));
+            }
+
+            $callingFunction = SnapUtil::getCallingFunctionName(1);
+            $logging_message = "[{$unique_id}] {$callingFunction} " . self::maskPackageHash($message);
+
+            TraceLogMng::getInstance()->write($logging_message);
+        } catch (Throwable $e) {
+            // Trace logging is best-effort and must never interfere with the request.
         }
-
-        if ($unique_id === null) {
-            $remotePort  = SnapUtil::sanitizeIntInput(INPUT_SERVER, 'REMOTE_PORT', -1);
-            $remotePort  = $remotePort > 0 ? $remotePort : '';
-            $requestTime = SnapUtil::sanitizeIntInput(INPUT_SERVER, 'REQUEST_TIME', -1);
-            $requestTime = $requestTime > 0 ? $requestTime : '';
-            $remoteAddr  = SnapUtil::sanitizeTextInput(INPUT_SERVER, 'REMOTE_ADDR', '');
-            $unique_id   = sprintf("%08x", abs(crc32($remoteAddr . $requestTime . $remotePort)));
-        }
-
-        $logging_message = "[{$unique_id}] {$callingFunction} " . self::maskPackageHash($message);
-
-        TraceLogMng::getInstance()->write($logging_message);
     }
 
     /**
@@ -308,7 +317,7 @@ class DupLog
     public static function trace(
         string $message
     ): void {
-        self::writeTrace($message, SnapUtil::getCallingFunctionName());
+        self::writeTrace($message);
     }
 
     /**
@@ -321,12 +330,7 @@ class DupLog
      */
     public static function traceException(Throwable $e, string $msg = ''): void
     {
-        $log = '';
-        if (strlen($msg) > 0) {
-            $log = $msg . "\n";
-        }
-        $log .= SnapLog::getTextException($e);
-        self::writeTrace($log, SnapUtil::getCallingFunctionName());
+        self::writeTrace($msg, $e);
     }
 
     /**
@@ -339,7 +343,7 @@ class DupLog
     public static function traceBacktrace(string $msg = ''): void
     {
         $trace = (strlen($msg) > 0) ? $msg . "\n" : '';
-        self::writeTrace($trace . SnapLog::getCurrentbacktrace('traceBacktrace', 1), SnapUtil::getCallingFunctionName());
+        self::writeTrace($trace . SnapLog::getCurrentbacktrace('traceBacktrace', 1));
     }
 
     /**
@@ -354,7 +358,7 @@ class DupLog
         $trace  = (strlen($msg) > 0) ? $msg . "\n" : '';
         $trace .= SnapLog::getCurrentbacktrace('traceBacktrace', 1);
         self::info($trace);
-        self::writeTrace($trace, SnapUtil::getCallingFunctionName());
+        self::writeTrace($trace);
     }
 
 
@@ -370,7 +374,7 @@ class DupLog
     {
         $message = "***ERROR*** " .  $message;
         self::info($message);
-        self::writeTrace($message, SnapUtil::getCallingFunctionName());
+        self::writeTrace($message);
     }
 
     /**
@@ -383,9 +387,8 @@ class DupLog
      */
     public static function traceObject(string $message, $object): void
     {
-        $calling = SnapUtil::getCallingFunctionName();
         $message = $message . " >>> " . SnapLog::v2str($object);
-        self::writeTrace($message, $calling);
+        self::writeTrace($message);
     }
 
     /**

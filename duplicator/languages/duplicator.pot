@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-08T16:05:22+00:00\n"
+"POT-Creation-Date: 2026-09-10T16:27:40+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: duplicator\n"
@@ -1935,11 +1935,11 @@ msgid ""
 msgstr ""
 
 #: src/Ajax/ServicesPackage.php:367
-#: src/Ajax/ServicesPackage.php:670
-#: src/Ajax/ServicesPackage.php:697
-#: src/Ajax/ServicesPackage.php:741
-#: src/Ajax/ServicesPackage.php:886
-#: src/Ajax/ServicesPackage.php:981
+#: src/Ajax/ServicesPackage.php:677
+#: src/Ajax/ServicesPackage.php:704
+#: src/Ajax/ServicesPackage.php:748
+#: src/Ajax/ServicesPackage.php:893
+#: src/Ajax/ServicesPackage.php:988
 msgid "Invalid request."
 msgstr ""
 
@@ -1947,24 +1947,29 @@ msgstr ""
 msgid "Couldn't get Backup."
 msgstr ""
 
-#: src/Ajax/ServicesPackage.php:687
+#: src/Ajax/ServicesPackage.php:587
+#: src/Controllers/PackagesPageActions.php:91
+msgid "Backups cannot be removed while an AutoTune session is running."
+msgstr ""
+
+#: src/Ajax/ServicesPackage.php:694
 msgid "File type not supported."
 msgstr ""
 
-#: src/Ajax/ServicesPackage.php:691
+#: src/Ajax/ServicesPackage.php:698
 msgid "File doesn't exist"
 msgstr ""
 
-#: src/Ajax/ServicesPackage.php:750
+#: src/Ajax/ServicesPackage.php:757
 #, php-format
 msgid "Could not get Backup by ID %s"
 msgstr ""
 
-#: src/Ajax/ServicesPackage.php:776
-#: src/Ajax/ServicesPackage.php:782
+#: src/Ajax/ServicesPackage.php:783
+#: src/Ajax/ServicesPackage.php:789
 #: src/Models/ActivityLog/LogEventBackupCreate.php:487
 #: src/Models/ActivityLog/LogEventBackupCreate.php:534
-#: src/Package/PackageUtils.php:565
+#: src/Package/PackageUtils.php:567
 #: src/Utils/Email/EmailSummary.php:261
 #: src/Utils/Email/EmailSummary.php:269
 #: template/admin_pages/activity_log/parts/sub_table_mini.php:51
@@ -1974,16 +1979,16 @@ msgstr ""
 msgid "N/A"
 msgstr ""
 
-#: src/Ajax/ServicesPackage.php:790
+#: src/Ajax/ServicesPackage.php:797
 #: src/Models/ActivityLog/LogEventBackupCreate.php:434
 #: src/Models/ActivityLog/LogEventUnknown.php:27
 #: src/Models/Storages/UnknownStorage.php:80
 #: src/Models/Storages/UnknownStorage.php:90
 #: src/Package/BuildRequirements.php:254
 #: src/Package/BuildRequirements.php:280
-#: src/Package/PackageUtils.php:500
-#: src/Package/PackageUtils.php:549
-#: src/Package/PackageUtils.php:613
+#: src/Package/PackageUtils.php:502
+#: src/Package/PackageUtils.php:551
+#: src/Package/PackageUtils.php:615
 #: src/Package/Storage/UploadInfo.php:301
 #: template/admin_pages/activity_log/parts/sub_table_mini.php:60
 #: template/admin_pages/activity_log/parts/table_row.php:36
@@ -1994,40 +1999,40 @@ msgstr ""
 msgid "Unknown"
 msgstr ""
 
-#: src/Ajax/ServicesPackage.php:815
+#: src/Ajax/ServicesPackage.php:822
 msgid "No Backup is building."
 msgstr ""
 
-#: src/Ajax/ServicesPackage.php:826
+#: src/Ajax/ServicesPackage.php:833
 msgid "Synchronizing with server..."
 msgstr ""
 
-#: src/Ajax/ServicesPackage.php:829
+#: src/Ajax/ServicesPackage.php:836
 msgid "Another Backup is presently running."
 msgstr ""
 
-#: src/Ajax/ServicesPackage.php:834
+#: src/Ajax/ServicesPackage.php:841
 msgid "Cancellation pending..."
 msgstr ""
 
-#: src/Ajax/ServicesPackage.php:900
+#: src/Ajax/ServicesPackage.php:907
 #, php-format
 msgid "Could not find Backup ID %d!"
 msgstr ""
 
-#: src/Ajax/ServicesPackage.php:1048
+#: src/Ajax/ServicesPackage.php:1055
 msgid "Invalid action."
 msgstr ""
 
-#: src/Ajax/ServicesPackage.php:1052
+#: src/Ajax/ServicesPackage.php:1059
 msgid "Invalid Backup ID."
 msgstr ""
 
-#: src/Ajax/ServicesPackage.php:1056
+#: src/Ajax/ServicesPackage.php:1063
 msgid "Backup already exists locally."
 msgstr ""
 
-#: src/Ajax/ServicesPackage.php:1081
+#: src/Ajax/ServicesPackage.php:1088
 msgid "Backup does not exist in any remote storage."
 msgstr ""
 
@@ -2126,23 +2131,23 @@ msgstr ""
 msgid "Error"
 msgstr ""
 
-#: src/Controllers/PackagesPageActions.php:54
+#: src/Controllers/PackagesPageActions.php:55
 msgid "Backup ID not found"
 msgstr ""
 
-#: src/Controllers/PackagesPageActions.php:69
+#: src/Controllers/PackagesPageActions.php:70
 msgid "You don't have permissions to stop a backup build."
 msgstr ""
 
-#: src/Controllers/PackagesPageActions.php:74
+#: src/Controllers/PackagesPageActions.php:75
 msgid "Invalid backup id"
 msgstr ""
 
-#: src/Controllers/PackagesPageActions.php:95
+#: src/Controllers/PackagesPageActions.php:99
 msgid "Backup set for cancelling."
 msgstr ""
 
-#: src/Controllers/PackagesPageActions.php:97
+#: src/Controllers/PackagesPageActions.php:101
 msgid "Couldn't set backup for cancelling."
 msgstr ""
 
@@ -2531,7 +2536,7 @@ msgid "AutoTune could not find a working configuration"
 msgstr ""
 
 #: src/Controllers/ToolsPageController.php:202
-#: src/Package/PackageUtils.php:451
+#: src/Package/PackageUtils.php:453
 #: template/admin_pages/packages/package_create_button.php:58
 msgid "AutoTune"
 msgstr ""
@@ -2552,35 +2557,35 @@ msgstr ""
 msgid "AI"
 msgstr ""
 
-#: src/Core/Bootstrap.php:416
+#: src/Core/Bootstrap.php:412
 msgid "Unexpected Error!"
 msgstr ""
 
-#: src/Core/Bootstrap.php:444
+#: src/Core/Bootstrap.php:440
 msgid "Copy to clipboard"
 msgstr ""
 
-#: src/Core/Bootstrap.php:445
+#: src/Core/Bootstrap.php:441
 msgid "Copied to Clipboard"
 msgstr ""
 
-#: src/Core/Bootstrap.php:446
+#: src/Core/Bootstrap.php:442
 msgid "Unable to copy"
 msgstr ""
 
-#: src/Core/Bootstrap.php:453
+#: src/Core/Bootstrap.php:449
 msgid "Failed to load help content!"
 msgstr ""
 
-#: src/Core/Bootstrap.php:673
+#: src/Core/Bootstrap.php:669
 msgid "Manage"
 msgstr ""
 
-#: src/Core/Bootstrap.php:693
+#: src/Core/Bootstrap.php:689
 msgid "Get Help"
 msgstr ""
 
-#: src/Core/Bootstrap.php:693
+#: src/Core/Bootstrap.php:689
 #: template/parts/admin-logo-header.php:20
 msgid "Help"
 msgstr ""
@@ -4314,8 +4319,8 @@ msgstr ""
 
 #: src/Package/Archive/PackageArchiveShellZip.php:46
 msgid ""
-"Your hosting provider stopped the zip process before the archive could finish,\n"
-"                    usually due to server resource limits.\n"
+"The zip process did not complete during the previous request.\n"
+"                    This can happen when the server interrupts the process or the request ends unexpectedly.\n"
 "                    Switching to a different archive engine is recommended for better stability."
 msgstr ""
 
@@ -4365,7 +4370,7 @@ msgstr ""
 #: src/Package/Archive/PackageArchiveZip.php:288
 #: src/Package/Archive/PackageArchiveZip.php:379
 #: src/Package/Archive/PackageArchiveZip.php:427
-#: src/Package/Archive/PackageArchiveZip.php:570
+#: src/Package/Archive/PackageArchiveZip.php:569
 msgid "Could not open the archive file. Try switching to the DupArchive engine."
 msgstr ""
 
@@ -4379,11 +4384,11 @@ msgstr ""
 msgid "The archive file list looks inconsistent, so the build was stopped."
 msgstr ""
 
-#: src/Package/Archive/PackageArchiveZip.php:517
+#: src/Package/Archive/PackageArchiveZip.php:515
 msgid "The backup exceeded the maximum build time and was stopped."
 msgstr ""
 
-#: src/Package/Archive/PackageArchiveZip.php:585
+#: src/Package/Archive/PackageArchiveZip.php:584
 msgid ""
 "Your hosting provider repeatedly stopped the archive build process,\n"
 "            usually due to server resource limits.\n"
@@ -4530,7 +4535,7 @@ msgid "Authentication"
 msgstr ""
 
 #: src/Package/AutoTune/AutoTuneDetector.php:409
-#: src/Package/PackageUtils.php:440
+#: src/Package/PackageUtils.php:442
 #: src/Utils/Email/EmailSummary.php:260
 msgid "Manual"
 msgstr ""
@@ -4589,75 +4594,75 @@ msgstr ""
 msgid "Raise memory_limit to at least %s in the PHP configuration, or ask the host to do it."
 msgstr ""
 
-#: src/Package/AutoTune/AutoTuneManager.php:109
+#: src/Package/AutoTune/AutoTuneManager.php:115
 msgid "AutoTune is being updated by another process."
 msgstr ""
 
-#: src/Package/AutoTune/AutoTuneManager.php:115
+#: src/Package/AutoTune/AutoTuneManager.php:121
 msgid "An AutoTune session is already running."
 msgstr ""
 
-#: src/Package/AutoTune/AutoTuneManager.php:132
+#: src/Package/AutoTune/AutoTuneManager.php:138
 msgid "No usable build configuration is available on this server. Review the backup settings."
 msgstr ""
 
-#: src/Package/AutoTune/AutoTuneManager.php:158
-#: src/Package/AutoTune/AutoTuneManager.php:614
+#: src/Package/AutoTune/AutoTuneManager.php:164
+#: src/Package/AutoTune/AutoTuneManager.php:637
 msgid "The default backup template is missing."
 msgstr ""
 
-#: src/Package/AutoTune/AutoTuneManager.php:185
+#: src/Package/AutoTune/AutoTuneManager.php:191
 msgid "No AutoTune session is running."
 msgstr ""
 
-#: src/Package/AutoTune/AutoTuneManager.php:193
+#: src/Package/AutoTune/AutoTuneManager.php:199
 msgid "Session aborted by the user."
 msgstr ""
 
-#: src/Package/AutoTune/AutoTuneManager.php:210
+#: src/Package/AutoTune/AutoTuneManager.php:216
 msgid "Cannot restore the settings while the AutoTune session is running."
 msgstr ""
 
-#: src/Package/AutoTune/AutoTuneManager.php:482
+#: src/Package/AutoTune/AutoTuneManager.php:505
 msgid "This backup belongs to the running AutoTune session. Abort the session from the AutoTune page to stop it."
 msgstr ""
 
-#: src/Package/AutoTune/AutoTuneManager.php:508
-#: src/Package/AutoTune/AutoTuneManager.php:568
-#: src/Package/AutoTune/AutoTuneManager.php:657
+#: src/Package/AutoTune/AutoTuneManager.php:531
+#: src/Package/AutoTune/AutoTuneManager.php:591
+#: src/Package/AutoTune/AutoTuneManager.php:680
 msgid "The test Backup no longer exists."
 msgstr ""
 
-#: src/Package/AutoTune/AutoTuneManager.php:531
+#: src/Package/AutoTune/AutoTuneManager.php:554
 msgid "The maximum AutoTune session time was exceeded."
 msgstr ""
 
-#: src/Package/AutoTune/AutoTuneManager.php:549
+#: src/Package/AutoTune/AutoTuneManager.php:572
 msgid "The AutoTune session has no attempts."
 msgstr ""
 
-#: src/Package/AutoTune/AutoTuneManager.php:603
+#: src/Package/AutoTune/AutoTuneManager.php:626
 msgid "Another backup started during the AutoTune session."
 msgstr ""
 
-#: src/Package/AutoTune/AutoTuneManager.php:627
+#: src/Package/AutoTune/AutoTuneManager.php:650
 msgid "The next AutoTune attempt could not be started."
 msgstr ""
 
-#: src/Package/AutoTune/AutoTuneManager.php:685
+#: src/Package/AutoTune/AutoTuneManager.php:708
 #: src/Views/AutoTunePageData.php:548
 msgid "The test Backup failed without reporting the cause."
 msgstr ""
 
-#: src/Package/AutoTune/AutoTuneManager.php:933
+#: src/Package/AutoTune/AutoTuneManager.php:956
 msgid "AutoTune stopped because an internal transition failed."
 msgstr ""
 
-#: src/Package/AutoTune/AutoTuneManager.php:984
+#: src/Package/AutoTune/AutoTuneManager.php:1007
 msgid "One of the AutoTune exclusions is not refusable."
 msgstr ""
 
-#: src/Package/AutoTune/AutoTuneManager.php:1019
+#: src/Package/AutoTune/AutoTuneManager.php:1042
 msgid "The default template encrypts the archive:"
 msgstr ""
 
@@ -5687,24 +5692,24 @@ msgstr ""
 msgid "A backup cancellation is in progress. Wait for it to finish and try again."
 msgstr ""
 
-#: src/Package/PackageUtils.php:445
+#: src/Package/PackageUtils.php:447
 msgid "Template"
 msgstr ""
 
-#: src/Package/PackageUtils.php:454
+#: src/Package/PackageUtils.php:456
 msgid "API"
 msgstr ""
 
-#: src/Package/PackageUtils.php:570
+#: src/Package/PackageUtils.php:572
 #, php-format
 msgid "%.1f sec"
 msgstr ""
 
-#: src/Package/PackageUtils.php:585
+#: src/Package/PackageUtils.php:587
 msgid "multi-thread"
 msgstr ""
 
-#: src/Package/PackageUtils.php:585
+#: src/Package/PackageUtils.php:587
 msgid "single thread"
 msgstr ""
 
@@ -5720,11 +5725,11 @@ msgstr ""
 msgid "How to resolve schedule build failures"
 msgstr ""
 
-#: src/Package/Runner.php:656
+#: src/Package/Runner.php:664
 msgid "The backup failed validating the scanned files. Check the backup log for details."
 msgstr ""
 
-#: src/Package/Runner.php:736
+#: src/Package/Runner.php:744
 #: template/admin_pages/packages/row_parts/package_progress_error.php:58
 #: template/admin_pages/packages/row_parts/package_progress_error.php:63
 msgid "Requirements Failed"
@@ -5787,8 +5792,12 @@ msgstr ""
 msgid "ACTUAL FILE/DIRECTORY COUNT: %1$s"
 msgstr ""
 
-#: src/Package/TraitPackageBuild.php:387
+#: src/Package/TraitPackageBuild.php:381
 msgid "The backup archive has fewer files than expected and may be incomplete."
+msgstr ""
+
+#: src/Package/TraitPackageBuild.php:382
+msgid "The backup archive has more files than expected and may be inconsistent."
 msgstr ""
 
 #: src/Package/TraitPackageProgress.php:68
@@ -6328,23 +6337,23 @@ msgid ""
 "                    Cached values may still reference the old domain after a migration."
 msgstr ""
 
-#: src/Utils/CronUtils.php:59
+#: src/Utils/CronUtils.php:60
 msgid "Once an Hour"
 msgstr ""
 
-#: src/Utils/CronUtils.php:64
+#: src/Utils/CronUtils.php:65
 msgid "Once a Day"
 msgstr ""
 
-#: src/Utils/CronUtils.php:69
+#: src/Utils/CronUtils.php:70
 msgid "Once a Week"
 msgstr ""
 
-#: src/Utils/CronUtils.php:74
+#: src/Utils/CronUtils.php:75
 msgid "Once a Month"
 msgstr ""
 
-#: src/Utils/CronUtils.php:79
+#: src/Utils/CronUtils.php:80
 msgid "Every 6 Hours"
 msgstr ""
 

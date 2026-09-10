@@ -737,7 +737,7 @@ class SnapIO
             return @unlink($path);
         } else {
             self::chmod($path, 'u+rwx');
-            if (($dh = opendir($path)) === false) {
+            if (($dh = @opendir($path)) === false) {
                 return false;
             }
             try {
@@ -811,6 +811,21 @@ class SnapIO
                 throw new Exception("Error seeking to file offset $offset. Retval = $ret_val");
             }
         }
+    }
+
+    /**
+     * Whether the file was last modified at least the given number of seconds ago.
+     * False when the modification time cannot be read.
+     *
+     * @param string $path    file path
+     * @param int    $seconds age threshold in seconds
+     *
+     * @return bool
+     */
+    public static function isOlderThan(string $path, int $seconds): bool
+    {
+        $mtime = self::callWithPhpErrorCapture(static fn() => filemtime($path));
+        return $mtime !== false && $mtime <= time() - $seconds;
     }
 
     /**
