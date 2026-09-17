@@ -96,7 +96,12 @@ class CryptBlowfish implements CryptInterface
             // Flush filesystem and OPcache so the next request reads the updated wp-config.php
             clearstatcache(true, $wpConfig);
             if (function_exists('opcache_invalidate')) {
-                opcache_invalidate($wpConfig, true);
+                $restrictApi = ini_get('opcache.restrict_api');
+                $scriptPath  = realpath(SnapUtil::sanitizeTextInput(INPUT_SERVER, 'SCRIPT_FILENAME', ''));
+
+                if (empty($restrictApi) || ($scriptPath !== false && strpos($scriptPath, $restrictApi) === 0)) {
+                    opcache_invalidate($wpConfig, true);
+                }
             }
         } catch (Throwable $e) {
             DupLog::trace('Can\'t create wp-config secure key, error: ' . $e->getMessage());
@@ -166,6 +171,7 @@ class CryptBlowfish implements CryptInterface
             $iv = random_bytes(self::IV_LENGTH);
 
             $crypt = new Blowfish('cbc');
+            $crypt->setPreferredEngine('PHP');
             $crypt->setKey($key);
             $crypt->setIV($iv);
             $crypt->disablePadding();
@@ -271,6 +277,7 @@ class CryptBlowfish implements CryptInterface
         $ciphertext = substr($decoded, self::IV_LENGTH);
 
         $crypt = new Blowfish('cbc');
+        $crypt->setPreferredEngine('PHP');
         $crypt->setKey($key);
         $crypt->setIV($iv);
         $crypt->disablePadding();
@@ -296,6 +303,7 @@ class CryptBlowfish implements CryptInterface
         }
 
         $crypt = new Blowfish('ecb');
+        $crypt->setPreferredEngine('PHP');
         $crypt->disablePadding();
         $crypt->setKey($key);
 

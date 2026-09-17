@@ -85,9 +85,6 @@ class BuildRequirements
         $testCURL = SnapUtil::isCurlEnabled();
         self::logCheckFalse($testCURL, 'curl_init function doesn\'t exist.');
 
-        $test64Bit = (bool) strstr(SnapUtil::getArchitectureString(), '64');
-        self::logCheckFalse($test64Bit, 'This servers PHP architecture is NOT 64-bit.  Backups over 2GB are not possible.');
-
         $testMemory = SnapServer::memoryLimitCheck(DUPLICATOR_MIN_MEMORY_LIMIT);
         self::logCheckFalse($testCURL, 'memory_limit is less than DUPLICATOR_MIN_MEMORY_LIMIT: ' . DUPLICATOR_MIN_MEMORY_LIMIT);
 
@@ -99,7 +96,6 @@ class BuildRequirements
         $checks['SRV']['PHP']['mysqli']        = $testMySqlConnect;
         $checks['SRV']['PHP']['allowurlfopen'] = $testURLFopen;
         $checks['SRV']['PHP']['curlavailable'] = $testCURL;
-        $checks['SRV']['PHP']['arch64bit']     = $test64Bit;
         $checks['SRV']['PHP']['minMemory']     = $testMemory;
         $checks['SRV']['PHP']['version']       = true; // now the plugin is activated only if the minimum version is valid, so this check is always true
         $allCheck                              = true;

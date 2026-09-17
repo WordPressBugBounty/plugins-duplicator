@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace Duplicator\Core\Options\Rules;
 
-use Duplicator\Core\Constants;
 use Duplicator\Core\Exceptions\DupliException;
 use Duplicator\Core\Options\Requirements\RequirementDefs;
-use Duplicator\Libs\Snap\SnapUtil;
 use Duplicator\Models\GlobalEntity;
 use Duplicator\Package\Archive\PackageArchive;
 use Exception;
@@ -73,26 +71,16 @@ class ArchiveEngineRule extends AbstractOptionRule
     }
 
     /**
-     * Shell zip is the fastest engine, ZipArchive the most compatible zip one and
-     * DupArchive the terminal value that is always available. On throttled servers
-     * (low fixed max_execution_time) DupArchive is preferred from the start.
+     * Prefer DupArchive for defaults and corrections, with ZIP engines as fallbacks.
      *
      * @return int[] enum PackageArchive::BUILD_MODE_*
      */
     public function getPreference(): array
     {
-        if (self::shouldDefaultToDupArchive()) {
-            return [
-                PackageArchive::BUILD_MODE_DUP_ARCHIVE,
-                PackageArchive::BUILD_MODE_SHELL_EXEC,
-                PackageArchive::BUILD_MODE_ZIP_ARCHIVE,
-            ];
-        }
-
         return [
+            PackageArchive::BUILD_MODE_DUP_ARCHIVE,
             PackageArchive::BUILD_MODE_SHELL_EXEC,
             PackageArchive::BUILD_MODE_ZIP_ARCHIVE,
-            PackageArchive::BUILD_MODE_DUP_ARCHIVE,
         ];
     }
 
@@ -146,23 +134,5 @@ class ArchiveEngineRule extends AbstractOptionRule
         if (!$global->setBuildMode((int) $value)) {
             throw new Exception('Unable to save the archive engine.');
         }
-    }
-
-    /**
-     * True if the environment should prefer DupArchive over the zip engines:
-     * with a low fixed max_execution_time the single-threaded zip engines are
-     * likely to time out, while DupArchive chunks the work over multiple requests.
-     *
-     * @return bool
-     */
-    protected static function shouldDefaultToDupArchive(): bool
-    {
-        $maxExecutionTime = SnapUtil::phpIniGet('max_execution_time', 30, 'int');
-
-        return (
-            $maxExecutionTime > 0 &&
-            $maxExecutionTime < Constants::DUPARCHIVE_DEFAULT_MAX_EXECUTION_TIME &&
-            !SnapUtil::isIniValChangeable('max_execution_time')
-        );
     }
 }

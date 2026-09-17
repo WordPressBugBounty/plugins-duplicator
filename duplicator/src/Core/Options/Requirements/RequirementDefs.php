@@ -28,6 +28,7 @@ class RequirementDefs
     const REQ_SHELL_ZIP_BINARY      = 'shell_zip_binary';
     const REQ_OPENSSL               = 'openssl';
     const REQ_MYSQLDUMP_BINARY      = 'mysqldump_binary';
+    const REQ_PHP_64BIT             = 'php_64bit';
     const REQ_HOME_READABLE         = 'home_readable';
     const REQ_SSDIR_WRITABLE        = 'ssdir_writable';
     const REQ_SSTMP_WRITABLE        = 'sstmp_writable';
@@ -81,6 +82,7 @@ class RequirementDefs
     public static function getBaselineRequirementIds(): array
     {
         $ids = [
+            self::REQ_PHP_64BIT,
             self::REQ_HOME_READABLE,
             self::REQ_SSDIR_WRITABLE,
             self::REQ_SSTMP_WRITABLE,
@@ -99,6 +101,11 @@ class RequirementDefs
     /**
      * Build all the core requirement definitions
      *
+     * Presentation strings must be resolved lazily because upgrade corrections
+     * can initialize this catalog before WordPress reaches the init action.
+     * Translating them while building the catalog would trigger an early
+     * just-in-time load of the plugin text domain.
+     *
      * @return Requirement[]
      */
     public static function getRequirements(): array
@@ -111,9 +118,9 @@ class RequirementDefs
         foreach (self::BASE_PHP_FUNCTIONS as $function => $docUrl) {
             $result[] = new Requirement(
                 self::getPhpFuncRequirementId($function),
-                sprintf(__('PHP function %s', 'duplicator'), $function),
+                static fn(): string => sprintf(__('PHP function %s', 'duplicator'), $function),
                 fn(): bool => function_exists($function),
-                sprintf(__('The required PHP function %s doesn\'t exist.', 'duplicator'), $function),
+                static fn(): string => sprintf(__('The required PHP function %s doesn\'t exist.', 'duplicator'), $function),
                 '',
                 $docUrl
             );
@@ -132,10 +139,13 @@ class RequirementDefs
         return [
             new Requirement(
                 self::REQ_ZLIB,
-                __('PHP zlib compression functions', 'duplicator'),
+                static fn(): string => __('PHP zlib compression functions', 'duplicator'),
                 fn(): bool => SnapUtil::isZlibEnabled(),
-                __('The PHP zlib extension (gzdeflate/gzinflate functions) is not available on this server.', 'duplicator'),
-                __(
+                static fn(): string => __(
+                    'The PHP zlib extension (gzdeflate/gzinflate functions) is not available on this server.',
+                    'duplicator'
+                ),
+                static fn(): string => __(
                     'DupArchive requires the PHP zlib extension when compression is enabled.
                     Enable zlib, set Archive Compression to Off, or switch to the ZipArchive or Shell Zip engine if available.',
                     'duplicator'
@@ -144,42 +154,48 @@ class RequirementDefs
             ),
             new Requirement(
                 self::REQ_ZIPARCHIVE_EXT,
-                __('PHP ZipArchive class', 'duplicator'),
+                static fn(): string => __('PHP ZipArchive class', 'duplicator'),
                 fn(): bool => ZipArchiveExtended::isPhpZipAvailable(),
-                __('The PHP ZipArchive class doesn\'t exist on this server.', 'duplicator'),
-                __('Enable the PHP zip extension or switch to another Archive Engine.', 'duplicator'),
+                static fn(): string => __('The PHP ZipArchive class doesn\'t exist on this server.', 'duplicator'),
+                static fn(): string => __('Enable the PHP zip extension or switch to another Archive Engine.', 'duplicator'),
                 DUPLICATOR_DUPLICATOR_DOCS_URL . 'how-to-work-with-the-different-zip-engines'
             ),
             new Requirement(
                 self::REQ_ZIPARCHIVE_ENCRYPTION,
-                __('ZipArchive encryption support', 'duplicator'),
+                static fn(): string => __('ZipArchive encryption support', 'duplicator'),
                 fn(): bool => ZipArchiveExtended::isEncryptionAvaliable(),
-                __('This server doesn\'t support ZipArchive encryption.', 'duplicator'),
+                static fn(): string => __('This server doesn\'t support ZipArchive encryption.', 'duplicator'),
                 fn(): string => self::getZipArchiveEncryptionFixHint(),
                 DUPLICATOR_BLOG_URL . 'how-to-encrypt-backup/'
             ),
             new Requirement(
                 self::REQ_SHELL_ZIP_BINARY,
-                __('Shell zip binary', 'duplicator'),
+                static fn(): string => __('Shell zip binary', 'duplicator'),
                 fn(): bool => ShellZipUtils::getShellExecZipPath() != null,
-                __('The shell zip binary isn\'t available on this server.', 'duplicator'),
-                __('Enable PHP shell functions and install the zip binary, or switch to another Archive Engine.', 'duplicator'),
+                static fn(): string => __('The shell zip binary isn\'t available on this server.', 'duplicator'),
+                static fn(): string => __(
+                    'Enable PHP shell functions and install the zip binary, or switch to another Archive Engine.',
+                    'duplicator'
+                ),
                 DUPLICATOR_DUPLICATOR_DOCS_URL . 'how-to-work-with-the-different-zip-engines'
             ),
             new Requirement(
                 self::REQ_OPENSSL,
-                __('PHP OpenSSL module', 'duplicator'),
+                static fn(): string => __('PHP OpenSSL module', 'duplicator'),
                 fn(): bool => DupArchive::isEncryptionAvaliable(),
-                __('The PHP OpenSSL module isn\'t enabled on this server.', 'duplicator'),
+                static fn(): string => __('The PHP OpenSSL module isn\'t enabled on this server.', 'duplicator'),
                 fn(): string => TplMng::getInstance()->render('parts/requirements/openssl_fix_hint', [], false),
                 'https://www.php.net/manual/en/book.openssl.php'
             ),
             new Requirement(
                 self::REQ_MYSQLDUMP_BINARY,
-                __('mysqldump binary', 'duplicator'),
+                static fn(): string => __('mysqldump binary', 'duplicator'),
                 fn(): bool => WpDbUtils::getMySqlDumpPath() !== false,
-                __('The mysqldump binary isn\'t available on this server.', 'duplicator'),
-                __('Set a custom mysqldump path in the database settings or switch to the PHP database dump engine.', 'duplicator'),
+                static fn(): string => __('The mysqldump binary isn\'t available on this server.', 'duplicator'),
+                static fn(): string => __(
+                    'Set a custom mysqldump path in the database settings or switch to the PHP database dump engine.',
+                    'duplicator'
+                ),
                 'https://dev.mysql.com/doc/refman/en/mysqldump.html'
             ),
         ];
@@ -206,7 +222,7 @@ class RequirementDefs
     }
 
     /**
-     * Baseline requirements (IO paths, MySQL server, leftover installer files)
+     * Baseline requirements for the PHP runtime, filesystem and database
      *
      * @return Requirement[]
      */
@@ -214,8 +230,19 @@ class RequirementDefs
     {
         return [
             new Requirement(
+                self::REQ_PHP_64BIT,
+                static fn(): string => __('64-bit PHP', 'duplicator'),
+                static fn(): bool => (bool) apply_filters('duplicator_requirement_php_64bit', PHP_INT_SIZE >= 8),
+                static fn(): string => __(
+                    'Your server is running a 32-bit version of PHP.
+                    Starting with Duplicator 5.0, creating backups requires 64-bit PHP.
+                    Contact your hosting provider and ask them to enable 64-bit PHP for this site before creating a backup.',
+                    'duplicator'
+                )
+            ),
+            new Requirement(
                 self::REQ_HOME_READABLE,
-                __('Home path readable', 'duplicator'),
+                static fn(): string => __('Home path readable', 'duplicator'),
                 function (): bool {
                     $homePath = WpArchiveUtils::getArchiveListPaths('home');
                     if (strlen($homePath) === 0) {
@@ -227,40 +254,49 @@ class RequirementDefs
                     @closedir($handle);
                     return true;
                 },
-                __('The site home path can\'t be opened.', 'duplicator'),
-                __('Check the file permissions of the site root directory.', 'duplicator')
+                static fn(): string => __('The site home path can\'t be opened.', 'duplicator'),
+                static fn(): string => __('Check the file permissions of the site root directory.', 'duplicator')
             ),
             new Requirement(
                 self::REQ_SSDIR_WRITABLE,
-                __('Backups directory writable', 'duplicator'),
+                static fn(): string => __('Backups directory writable', 'duplicator'),
                 fn(): bool => is_writable(DUPLICATOR_SSDIR_PATH),
-                sprintf(__('The Duplicator Backups directory (%s) isn\'t writable.', 'duplicator'), DUPLICATOR_SSDIR_PATH),
-                __('Check the file permissions of the Duplicator Backups directory.', 'duplicator')
+                static fn(): string => sprintf(
+                    __('The Duplicator Backups directory (%s) isn\'t writable.', 'duplicator'),
+                    DUPLICATOR_SSDIR_PATH
+                ),
+                static fn(): string => __('Check the file permissions of the Duplicator Backups directory.', 'duplicator')
             ),
             new Requirement(
                 self::REQ_SSTMP_WRITABLE,
-                __('Temp directory writable', 'duplicator'),
+                static fn(): string => __('Temp directory writable', 'duplicator'),
                 fn(): bool => is_writable(DUPLICATOR_SSDIR_PATH_TMP),
-                sprintf(__('The Duplicator temp directory (%s) isn\'t writable.', 'duplicator'), DUPLICATOR_SSDIR_PATH_TMP),
-                __('Check the file permissions of the Duplicator temp directory.', 'duplicator')
+                static fn(): string => sprintf(
+                    __('The Duplicator temp directory (%s) isn\'t writable.', 'duplicator'),
+                    DUPLICATOR_SSDIR_PATH_TMP
+                ),
+                static fn(): string => __('Check the file permissions of the Duplicator temp directory.', 'duplicator')
             ),
             new Requirement(
                 self::REQ_MYSQL_MIN_VERSION,
-                __('MySQL minimum version', 'duplicator'),
+                static fn(): string => __('MySQL minimum version', 'duplicator'),
                 fn(): bool => version_compare(WpDbUtils::getVersion(), self::MYSQL_MIN_VERSION, '>='),
-                sprintf(__('The MySQL server version is lower than the minimum required version %s.', 'duplicator'), self::MYSQL_MIN_VERSION)
+                static fn(): string => sprintf(
+                    __('The MySQL server version is lower than the minimum required version %s.', 'duplicator'),
+                    self::MYSQL_MIN_VERSION
+                )
             ),
             new Requirement(
                 self::REQ_MYSQL_ESCAPE,
-                __('MySQL string escaping', 'duplicator'),
+                static fn(): string => __('MySQL string escaping', 'duplicator'),
                 fn(): bool => WpDbUtils::mysqlEscapeTest(),
-                __('The function mysqli_real_escape_string is not escaping strings as expected.', 'duplicator')
+                static fn(): string => __('The function mysqli_real_escape_string is not escaping strings as expected.', 'duplicator')
             ),
             new Requirement(
                 self::REQ_NO_INSTALLER_FILES,
-                __('No leftover installer files', 'duplicator'),
+                static fn(): string => __('No leftover installer files', 'duplicator'),
                 fn(): bool => count(MigrationMng::checkInstallerFilesList()) === 0,
-                __('Installer file(s) from a previous migration exist on the server.', 'duplicator'),
+                static fn(): string => __('Installer file(s) from a previous migration exist on the server.', 'duplicator'),
                 fn(): string => TplMng::getInstance()->render('parts/requirements/installer_files_fix_hint', [], false)
             ),
         ];

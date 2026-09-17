@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Duplicator\Core\Options\Requirements;
 
+use Closure;
 use Duplicator\Core\Exceptions\DupliException;
 use Duplicator\Utils\Logging\DupLog;
 use Throwable;
@@ -18,13 +19,13 @@ class Requirement
 {
     /** @var string */
     private string $id;
-    /** @var string */
-    private string $label;
+    /** @var string|Closure(): string resolved to a string at the first getLabel() call */
+    private $label;
     /** @var callable(): bool */
     private $check;
-    /** @var string */
-    private string $failMessage;
-    /** @var string|callable(): string resolved to a string at the first getFixHint() call */
+    /** @var string|Closure(): string resolved to a string at the first getFailMessage() call */
+    private $failMessage;
+    /** @var string|Closure(): string resolved to a string at the first getFixHint() call */
     private $fixHint;
     /** @var string */
     private string $docUrl;
@@ -34,21 +35,21 @@ class Requirement
     /**
      * Class constructor
      *
-     * @param string                    $id          Unique requirement id
-     * @param string                    $label       Human readable label
-     * @param callable(): bool          $check       Environment check, evaluated lazily and cached per request
-     * @param string                    $failMessage Message shown when the check fails
-     * @param string|callable(): string $fixHint     Optional hint on how to fix the failure (can contain HTML).
-     *                                               A callable is resolved lazily at the first getFixHint() call,
-     *                                               so the hint can depend on the admin page context (rendered
-     *                                               templates, action URLs) not available at registration time.
-     * @param string                    $docUrl      Optional documentation URL
+     * @param string                   $id          Unique requirement id
+     * @param string|Closure(): string $label       Human readable label
+     * @param callable(): bool         $check       Environment check, evaluated lazily and cached per request
+     * @param string|Closure(): string $failMessage Message shown when the check fails
+     * @param string|Closure(): string $fixHint     Optional hint on how to fix the failure (can contain HTML).
+     *                                              A Closure is resolved lazily at the first getFixHint() call,
+     *                                              so the hint can depend on the admin page context (rendered
+     *                                              templates, action URLs) not available at registration time.
+     * @param string                   $docUrl      Optional documentation URL
      */
     public function __construct(
         string $id,
-        string $label,
+        $label,
         callable $check,
-        string $failMessage,
+        $failMessage,
         $fixHint = '',
         string $docUrl = ''
     ) {
@@ -84,6 +85,9 @@ class Requirement
      */
     public function getLabel(): string
     {
+        if ($this->label instanceof Closure) {
+            $this->label = ($this->label)();
+        }
         return $this->label;
     }
 
@@ -127,19 +131,22 @@ class Requirement
      */
     public function getFailMessage(): string
     {
+        if ($this->failMessage instanceof Closure) {
+            $this->failMessage = ($this->failMessage)();
+        }
         return $this->failMessage;
     }
 
     /**
      * Get the fix hint, resolving and caching it at the first call when it
-     * was registered as a callable
+     * was registered as a Closure
      *
      * @return string
      */
     public function getFixHint(): string
     {
-        if (!is_string($this->fixHint)) {
-            $this->fixHint = (string) call_user_func($this->fixHint);
+        if ($this->fixHint instanceof Closure) {
+            $this->fixHint = ($this->fixHint)();
         }
         return $this->fixHint;
     }

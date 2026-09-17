@@ -115,7 +115,6 @@ final class AutoTuneRules
         DupliException::CODE_DB_COMPRESSION_FAILED,
         DupliException::CODE_DB_PROGRESS_SERIALIZATION_FAILED,
         DupliException::CODE_DB_TABLE_LIST_FAILED,
-        DupliException::CODE_DUP_ARCHIVE_32BIT_LIMIT,
         DupliException::CODE_INTEGRITY_SCANFILE_MISSING,
         DupliException::CODE_ENCRYPTION_UNAVAILABLE,
         DupliException::CODE_STORAGE_INVALID,
@@ -512,13 +511,6 @@ final class AutoTuneRules
                 'The build could not create or write its work files.
                 Check the free disk space and the permissions of the Duplicator backup directory inside wp-content,
                 then start a new AutoTune session.',
-                'duplicator'
-            );
-        }
-        if ($code === DupliException::CODE_DUP_ARCHIVE_32BIT_LIMIT) {
-            return __(
-                'The archive exceeded the 2 GB file size limit of 32-bit PHP.
-                Ask the host for a 64-bit PHP build or reduce the backup size with file filters, then start a new AutoTune session.',
                 'duplicator'
             );
         }

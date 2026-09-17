@@ -8627,8 +8627,11 @@ p + .dup-styles .stat {
   font-size: 12px;
 }
 .dup-styles .dupli-store-fixed-btn {
-  min-width: 235px;
+  min-width: 160px;
   text-align: center;
+}
+.dup-styles .dupli-detection-info {
+  margin-left: 4px;
 }
 .dup-styles div.success,
 .dup-styles span.success {

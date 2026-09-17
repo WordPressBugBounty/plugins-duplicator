@@ -18,6 +18,7 @@ use Duplicator\Libs\Snap\SnapIO;
 use Duplicator\Libs\Snap\SnapLog;
 use Duplicator\Libs\Snap\SnapURL;
 use Duplicator\Libs\Snap\SnapUtil;
+use Duplicator\Libs\Snap\SnapWP;
 use Duplicator\Models\DynamicGlobalEntity;
 use Duplicator\Models\StaticGlobal;
 use Duplicator\Models\Storages\AbstractStorageEntity;
@@ -483,6 +484,9 @@ class GlobalEntity extends AbstractEntity implements ModelMigrateSettingsInterfa
             ],
             function (): void {
                 OptionsManager::getInstance()->applyDefaults();
+                if (!$this->setZipArchiveChunkSize(self::getDefaultZipArchiveChunkSize())) {
+                    throw new Exception('Unable to save the ZipArchive buffer size.');
+                }
             }
         );
         if ($result === false) {
@@ -532,6 +536,9 @@ class GlobalEntity extends AbstractEntity implements ModelMigrateSettingsInterfa
                 ],
                 function (): void {
                     OptionsManager::getInstance()->applyDefaults();
+                    if (!$this->setZipArchiveChunkSize(self::getDefaultZipArchiveChunkSize())) {
+                        throw new Exception('Unable to save the ZipArchive buffer size.');
+                    }
                 }
             );
 
@@ -1163,6 +1170,23 @@ class GlobalEntity extends AbstractEntity implements ModelMigrateSettingsInterfa
         return DynamicGlobalEntity::getInstance()->setValInt(self::ZIPARCHIVE_MODE_KEY, $mode, $save);
     }
 
+    /**
+     * Return the default ZipArchive buffer size for the current PHP execution limit.
+     *
+     * @return int Buffer size in MB
+     */
+    public static function getDefaultZipArchiveChunkSize(): int
+    {
+        $maxExecutionTime = SnapUtil::phpIniGet('max_execution_time', 30, 'int');
+        if ($maxExecutionTime > 0 && $maxExecutionTime <= 30) {
+            return 32;
+        }
+        if ($maxExecutionTime > 30 && $maxExecutionTime < 60) {
+            return 64;
+        }
+        return 128;
+    }
+
     /** @return int<0,max> ZipArchive chunk size in MB */
     public function getZipArchiveChunkSize(): int
     {
@@ -1553,26 +1577,32 @@ class GlobalEntity extends AbstractEntity implements ModelMigrateSettingsInterfa
      */
     public static function customCleanupCronInterval(array $schedules): array
     {
-        $global = self::getInstance();
+        $global        = self::getInstance();
+        $intervalHours = null;
 
         switch ($global->getCleanupMode()) {
             case self::CLEANUP_MODE_OFF:
                 // No need to modify anything
                 break;
             case self::CLEANUP_MODE_MAIL:
-                $schedules[self::CLEANUP_INTERVAL_NAME] = [
-                    'interval' => self::CLEANUP_EMAIL_NOTICE_INTERVAL * 3600, // In seconds, every N hours
-                    'display'  => sprintf(esc_html__('Every %1$d hours', 'duplicator'), self::CLEANUP_EMAIL_NOTICE_INTERVAL),
-                ];
+                $intervalHours = self::CLEANUP_EMAIL_NOTICE_INTERVAL;
                 break;
             case self::CLEANUP_MODE_AUTO:
-                $schedules[self::CLEANUP_INTERVAL_NAME] = [
-                    'interval' => $global->getAutoCleanupHours() * 3600, // In seconds, every N hours
-                    'display'  => sprintf(esc_html__('Every %1$d hours', 'duplicator'), $global->getAutoCleanupHours()),
-                ];
+                $intervalHours = $global->getAutoCleanupHours();
                 break;
             default:
                 throw new Exception('Invalid cleanup mode:' . SnapLog::v2str($global->getCleanupMode()));
+        }
+
+        if ($intervalHours !== null) {
+            $display = SnapWP::isTranslationReady(DUPLICATOR____TEXT_DOMAIN)
+                ? sprintf(esc_html__('Every %1$d hours', 'duplicator'), $intervalHours)
+                : sprintf('Every %1$d hours', $intervalHours);
+
+            $schedules[self::CLEANUP_INTERVAL_NAME] = [
+                'interval' => $intervalHours * 3600,
+                'display'  => $display,
+            ];
         }
         return $schedules;
     }
@@ -1794,7 +1824,7 @@ class GlobalEntity extends AbstractEntity implements ModelMigrateSettingsInterfa
             FILTER_VALIDATE_INT,
             [
                 'options' => [
-                    'default'   => Constants::DEFAULT_ZIP_ARCHIVE_CHUNK,
+                    'default'   => self::getDefaultZipArchiveChunkSize(),
                     'min_range' => 1,
                 ],
             ]

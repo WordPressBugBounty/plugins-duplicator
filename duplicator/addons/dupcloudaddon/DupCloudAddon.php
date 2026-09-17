@@ -16,6 +16,7 @@ use Duplicator\Core\Controllers\ControllersManager;
 use Duplicator\Core\Views\TplMng;
 use Duplicator\Models\Storages\AbstractStorageEntity;
 use Duplicator\Models\Storages\StoragesUtil;
+use Duplicator\Models\Storages\UnknownStorage;
 use Duplicator\Package\AbstractPackage;
 use Duplicator\Package\Storage\UploadInfo;
 use Duplicator\Utils\Logging\DupLog;
@@ -87,6 +88,34 @@ class DupCloudAddon extends AbstractAddonCore
     }
 
     /**
+     * Get the Duplicator Cloud storage of the given upload, if any
+     *
+     * The transfer actions are global, so these handlers also run for S3, FTP, Dropbox and every
+     * other provider. Those are expected paths and must not pollute the Backup log; only a storage
+     * record that can no longer be loaded is reported to the user.
+     *
+     * @param UploadInfo $uploadInfo Upload info
+     * @param string     $action     Action being handled, used in the log messages
+     *
+     * @return ?DupCloudStorage Null if the upload doesn't belong to a Duplicator Cloud storage
+     */
+    private static function getDupCloudStorage(UploadInfo $uploadInfo, string $action): ?DupCloudStorage
+    {
+        $storage = $uploadInfo->getStorage();
+        if ($storage instanceof DupCloudStorage) {
+            return $storage;
+        }
+
+        if ($storage instanceof UnknownStorage) {
+            DupLog::infoTrace("Can't " . $action . " upload, storage not found [ID: " . $uploadInfo->getStorageId() . "]");
+        } else {
+            DupLog::trace("Skip Dup Cloud " . $action . " upload handler, storage type: " . $storage::getStypeName());
+        }
+
+        return null;
+    }
+
+    /**
      * Mark upload as failed
      *
      * @param UploadInfo $uploadInfo Upload info
@@ -96,10 +125,7 @@ class DupCloudAddon extends AbstractAddonCore
     public static function markUploadAsFailed(UploadInfo $uploadInfo): void
     {
         try {
-            /** @var DupCloudStorage $storage */
-            $storage = $uploadInfo->getStorage();
-            if (!($storage instanceof DupCloudStorage)) {
-                DupLog::infoTrace("Can't fail upload, storage not found");
+            if (($storage = self::getDupCloudStorage($uploadInfo, 'fail')) === null) {
                 return;
             }
 
@@ -138,10 +164,7 @@ class DupCloudAddon extends AbstractAddonCore
     public static function cancelUpload(UploadInfo $uploadInfo): void
     {
         try {
-            /** @var DupCloudStorage $storage */
-            $storage = $uploadInfo->getStorage();
-            if (!($storage instanceof DupCloudStorage)) {
-                DupLog::infoTrace("Can't cancel upload, storage not found");
+            if (($storage = self::getDupCloudStorage($uploadInfo, 'cancel')) === null) {
                 return;
             }
 

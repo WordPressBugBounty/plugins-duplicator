@@ -2,6 +2,7 @@
 
 namespace Duplicator\Utils;
 
+use Duplicator\Libs\Snap\SnapWP;
 use Duplicator\Models\GlobalEntity;
 use Duplicator\Utils\Logging\DupLog;
 use Duplicator\Models\ActivityLog\LogUtils;
@@ -53,7 +54,7 @@ class CronUtils
      */
     protected static function defaultCronIntervals($schedules)
     {
-        $translateLabels = did_action('init') || is_textdomain_loaded(DUPLICATOR____TEXT_DOMAIN);
+        $translateLabels = SnapWP::isTranslationReady(DUPLICATOR____TEXT_DOMAIN);
 
         $schedules[self::INTERVAL_HOURLY] = [
             'interval' => HOUR_IN_SECONDS,

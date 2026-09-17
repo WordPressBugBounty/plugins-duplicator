@@ -65,14 +65,18 @@ class ServicesTools extends AbstractAjaxService
         // AutoTune runs real test Backups, so it requires the same capability as backup creation
         CapMng::can(CapMng::CAP_CREATE);
 
-        $excludedJson   = SnapUtil::sanitizeTextInput(INPUT_POST, 'excludedValues', '{}');
-        $excludedValues = json_decode($excludedJson, true);
-        if (!is_array($excludedValues)) {
-            throw new Exception(__('The AutoTune configuration selection is invalid.', 'duplicator'));
-        }
-        foreach ($excludedValues as $key => $values) {
-            if (!is_string($key) || !is_array($values)) {
+        // The start dialog always posts the field: its absence means no user choice was collected
+        $excludedValues = null;
+        if (filter_input(INPUT_POST, 'excludedValues') !== null) {
+            $excludedJson   = SnapUtil::sanitizeTextInput(INPUT_POST, 'excludedValues', '{}');
+            $excludedValues = json_decode($excludedJson, true);
+            if (!is_array($excludedValues)) {
                 throw new Exception(__('The AutoTune configuration selection is invalid.', 'duplicator'));
+            }
+            foreach ($excludedValues as $key => $values) {
+                if (!is_string($key) || !is_array($values)) {
+                    throw new Exception(__('The AutoTune configuration selection is invalid.', 'duplicator'));
+                }
             }
         }
 

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Duplicator\Core\Options\Requirements;
 
+use Closure;
+
 /**
  * Result of the availability evaluation of one option: carries the option key
  * and one AvailabilityEntry per declared value. The value => outcome
@@ -90,12 +92,12 @@ class Availability
      * (used by the availability filter, e.g. managed host exclusions).
      * Writes against undeclared values are ignored.
      *
-     * @param scalar $value   The option value the exclusion belongs to
-     * @param string $message The reason why the value is unavailable (can contain HTML)
+     * @param scalar                   $value   The option value the exclusion belongs to
+     * @param string|Closure(): string $message The reason why the value is unavailable (can contain HTML)
      *
      * @return void
      */
-    public function addMessage($value, string $message): void
+    public function addMessage($value, $message): void
     {
         $entry = $this->findEntry($value);
         if ($entry !== null) {

@@ -45,6 +45,19 @@ class SnapWP
     private static $corePathList; // @phpstan-ignore property.unusedType,property.onlyRead
 
     /**
+     * Whether plugin translations can be used without triggering an early
+     * just-in-time text-domain load.
+     *
+     * @param string $textDomain Plugin text domain
+     *
+     * @return bool
+     */
+    public static function isTranslationReady(string $textDomain): bool
+    {
+        return did_action('init') > 0 || is_textdomain_loaded($textDomain);
+    }
+
+    /**
      * return safe ABSPATH without last /
      * perform safe function only one time
      *

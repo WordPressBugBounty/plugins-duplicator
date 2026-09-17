@@ -56,10 +56,13 @@ final class AutoTunePageData
             $counts[$check['severity']]++;
         }
 
+        $defaultExcluded = AutoTuneDetector::getDefaultExcludedValues();
+
         return [
             'serverCheckGroups' => $groups,
             'serverCheckCounts' => $counts,
-            'excludableOptions' => $this->getExcludableOptions(),
+            'excludableOptions' => $this->getExcludableOptions($defaultExcluded),
+            'isLiteSpeed'       => isset($defaultExcluded[ArchiveEngineRule::OPTION_KEY]),
             'logsUrl'           => ControllersManager::getMenuLink(
                 ControllersManager::TOOLS_SUBMENU_SLUG,
                 ToolsPageController::L2_SLUG_LOGS
@@ -310,7 +313,7 @@ final class AutoTunePageData
 
         foreach ([$report['kickoff'], $ajax, $auth] as $entry) {
             $status                  = $entry['statusList'][0];
-            $status['stateLabel']    = trim($status['stateLabel'] . ' — ' . $entry['state']);
+            $status['stateLabel']    = trim($status['stateLabel'] . '. ' . $entry['state']);
             $kickoff['statusList'][] = $status;
         }
 
@@ -384,7 +387,7 @@ final class AutoTunePageData
 
             $allAvailable   = false;
             $reasons        = implode(' ', array_map('wp_strip_all_tags', $availability->getReasons(true)));
-            $troubleshoot[] = trim($feature['label'] . ' — ' . $reasons . ' ' . $feature['note']);
+            $troubleshoot[] = trim($feature['label'] . ': ' . $reasons . ' ' . $feature['note']);
 
             if ($actionUrl === '') {
                 $requirements = $availability->getFailedRequirements(true);
@@ -462,13 +465,22 @@ final class AutoTunePageData
      * ladder value is listed: unavailable values and ladder fallbacks are
      * disabled so the interface stays consistent on every server.
      *
+     * Values excluded by host policy start unchecked like user-refused ones;
+     * the user can still check them.
+     *
+     * @param array<string, array<int|string|bool>> $defaultExcluded Option key => values excluded by host policy
+     *
      * @return array<int, array{key: string, label: string, options: array<int, array<string, mixed>>}>
      */
-    private function getExcludableOptions(): array
+    private function getExcludableOptions(array $defaultExcluded): array
     {
         $manager  = OptionsManager::getInstance();
         $excluded = AutoTuneSessionEntity::getInstance()->getUserExcludedValues();
         $groups   = [];
+
+        foreach ($defaultExcluded as $optionKey => $values) {
+            $excluded[$optionKey] = array_merge($excluded[$optionKey] ?? [], $values);
+        }
 
         foreach (AutoTuneDetector::LADDERS as $optionKey => $ladder) {
             $availability = $manager->availability($optionKey);

@@ -21,7 +21,6 @@ class Constants
     const TRANSFER_UNLIMITED_MAX_WORKER_TIME       = 60; // Worker time for storage transfer when max_execution_time is unlimited
     const MIN_MAX_WORKER_TIME                      = 5; // Minimum worker time floor in seconds
     const MAX_WORKER_TIME_HEADROOM                 = 15; // Seconds left below max_execution_time for PHP overhead and archive cleanup
-    const DUPARCHIVE_DEFAULT_MAX_EXECUTION_TIME    = 120; // Use DupArchive by default below this hard PHP timeout
     const DEFAULT_ZIP_ARCHIVE_CHUNK                = 64;
     const ORPAHN_CLEANUP_DELAY_MAX_PACKAGE_RUNTIME = 60;
 

@@ -840,7 +840,7 @@ class SettingsPageController extends AbstractMenuPageController
             INPUT_POST,
             GlobalEntity::ZIPARCHIVE_CHUNK_SIZE_IN_MB_KEY,
             FILTER_VALIDATE_INT,
-            ['options' => ['default' => Constants::DEFAULT_ZIP_ARCHIVE_CHUNK]]
+            ['options' => ['default' => GlobalEntity::getDefaultZipArchiveChunkSize()]]
         );
         $changesTraker->addChange(
             GlobalEntity::ZIPARCHIVE_CHUNK_SIZE_IN_MB_KEY,
@@ -1078,7 +1078,8 @@ class SettingsPageController extends AbstractMenuPageController
             'custom' => __('Custom', 'duplicator'),
         ];
         $dGlobalFresh    = DynamicGlobalEntity::getInstance();
-        $loopbackPassed  = $dGlobalFresh->getValBool(ClientSideKick::KICKOFF_DGLOBAL_KEY) === false;
+        $loopbackPassed  = $detectionResult['loopbackPass'];
+        $clientSideKick  = ClientSideKick::isClientSideKickoffMode();
         $kickoffMismatch = $newKickoffOverride === 'server' && !$loopbackPassed;
 
         $lockMismatch = !$lockResult['sqlReliable'] && !$lockResult['fileReliable'];
@@ -1090,17 +1091,12 @@ class SettingsPageController extends AbstractMenuPageController
                 'ajaxSettingLabel'      => $overrideLabels[$newAjaxProtocol],
                 'basicAuthSettingLabel' => $overrideLabels[$newBasicAuthMode],
                 'ajaxUrl'               => ClientSideKick::getBackendAjaxUrl(),
-                'sqlLockResult'         => $lockResult['sqlReliable']
-                    ? __('Success', 'duplicator')
-                    : __('Failed', 'duplicator'),
-                'fileLockResult'        => $lockResult['fileReliable']
-                    ? __('Success', 'duplicator')
-                    : __('Failed', 'duplicator'),
-                'kickoffResult'         => ClientSideKick::isClientSideKickoffMode()
-                    ? __('Enabled', 'duplicator')
-                    : __('Disabled', 'duplicator'),
+                'sqlLockPassed'         => $lockResult['sqlReliable'],
+                'fileLockPassed'        => $lockResult['fileReliable'],
+                'clientSideKickoff'     => $clientSideKick,
                 'basicAuthConfigured'   => $dGlobalFresh->getBasicAuthHeader() !== null,
                 'basicAuthUser'         => $dGlobalFresh->getValString(DynamicGlobalEntity::BASIC_AUTH_USER_KEY),
+                'kickoffOverride'       => $newKickoffOverride,
                 'kickoffMismatch'       => $kickoffMismatch,
                 'lockMismatch'          => $lockMismatch,
             ],

@@ -121,6 +121,30 @@ class AutoTuneDetector
     }
 
     /**
+     * Host policy exclusions applied when the caller expresses no choice:
+     * values AutoTune should not try first on this server, but that stay
+     * refusable, so a user can still select them from the start dialog.
+     *
+     * Shell Zip fails often on LiteSpeed, which can interrupt the zip process,
+     * so it is left out by default there.
+     *
+     * @return array<string, array<int|string|bool>> Option key => values excluded by default
+     */
+    public static function getDefaultExcludedValues(): array
+    {
+        if (SnapServer::getWebServer() !== SnapServer::WEBSERVER_LITESPEED) {
+            return [];
+        }
+
+        $excludable = self::getExcludableValues();
+        if (!in_array(PackageArchive::BUILD_MODE_SHELL_EXEC, $excludable[ArchiveEngineRule::OPTION_KEY] ?? [], true)) {
+            return [];
+        }
+
+        return [ArchiveEngineRule::OPTION_KEY => [PackageArchive::BUILD_MODE_SHELL_EXEC]];
+    }
+
+    /**
      * The attempt-1 configuration: the fastest available engine of each ladder
      * not refused by the user, plus the fast tuning defaults.
      *
@@ -217,14 +241,14 @@ class AutoTuneDetector
                 'available'  => $lockResult['sqlReliable'],
                 'stateLabel' => $lockResult['sqlReliable']
                     ? __('Reliable', 'duplicator')
-                    : sprintf(__('Not reliable — %s', 'duplicator'), $lockResult['sqlError']),
+                    : sprintf(__('Not reliable: %s', 'duplicator'), $lockResult['sqlError']),
             ],
             [
                 'label'      => __('File lock', 'duplicator'),
                 'available'  => $lockResult['fileReliable'],
                 'stateLabel' => $lockResult['fileReliable']
                     ? __('Reliable', 'duplicator')
-                    : sprintf(__('Not reliable — %s', 'duplicator'), $lockResult['fileError']),
+                    : sprintf(__('Not reliable: %s', 'duplicator'), $lockResult['fileError']),
             ],
         ];
 
@@ -429,8 +453,8 @@ class AutoTuneDetector
                     'label'      => __('Authentication', 'duplicator'),
                     'available'  => true,
                     'stateLabel' => $authDetected
-                    ? __('Automatic — detected', 'duplicator')
-                    : __('Automatic — not detected', 'duplicator'),
+                    ? __('Automatic (detected)', 'duplicator')
+                    : __('Automatic (not detected)', 'duplicator'),
                 ],
             ]
         );

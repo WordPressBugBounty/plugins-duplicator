@@ -33,37 +33,29 @@ if (!$tplMng->getDataValueBool('redetectRan')) { ?>
     return;
 }
 
-$lockSql      = $tplMng->getDataValueBool('redetectLockSql');
-$lockFile     = $tplMng->getDataValueBool('redetectLockFile');
-$loopbackPass = $tplMng->getDataValueBool('redetectLoopbackPass');
+$lockSql           = $tplMng->getDataValueBool('redetectLockSql');
+$lockFile          = $tplMng->getDataValueBool('redetectLockFile');
+$loopbackPass      = $tplMng->getDataValueBool('redetectLoopbackPass');
+$clientSideKickoff = $tplMng->getDataValueBool('redetectClientSideKickoff');
+$kickoffOverride   = $tplMng->getDataValueString('redetectKickoffOverride', 'auto');
+$lockMismatch      = !$lockSql && !$lockFile;
+$kickoffMismatch   = $kickoffOverride === 'server' && !$loopbackPass;
 
-$isWarning        = (!$lockSql && !$lockFile) || !$loopbackPass;
+$isWarning        = $lockMismatch || !$loopbackPass;
 $messageClasses[] = ($isWarning ? 'notice-warning' : 'notice-success');
-
-$sqlLockMessage = sprintf(
-    /* translators: %s is PASS or FAIL */
-    __('SQL Lock: %s.', 'duplicator'),
-    $lockSql ? __('PASS', 'duplicator') : __('FAIL', 'duplicator')
-);
-$fileLockMessage = sprintf(
-    /* translators: %s is PASS or FAIL */
-    __('File Lock: %s.', 'duplicator'),
-    $lockFile ? __('PASS', 'duplicator') : __('FAIL', 'duplicator')
-);
-
-if ($loopbackPass) {
-    $kickoffMessage = __('Kickoff self-request: PASS. The server can trigger build steps by itself (server-side kickoff).', 'duplicator');
-} else {
-    $kickoffMessage = __(
-        'Kickoff self-request: FAIL. The server cannot reach itself,
-        so builds will rely on the browser staying open (client-side kickoff).',
-        'duplicator'
-    );
-}
-
 ?>
 <div id="message" class="<?php echo esc_attr(implode(' ', $messageClasses)); ?>">
-    <p><b><?php esc_html_e('Server detection tests completed.', 'duplicator'); ?></b></p>
-    <p><?php echo esc_html($sqlLockMessage); ?><br><?php echo esc_html($fileLockMessage); ?></p>
-    <p><?php echo esc_html($kickoffMessage); ?></p>
+    <?php $tplMng->render(
+        'admin_pages/settings/backup/detection_result_message',
+        [
+            'messageTitle'        => __('Server detection tests completed.', 'duplicator'),
+            'showProcessSettings' => false,
+            'sqlLockPassed'       => $lockSql,
+            'fileLockPassed'      => $lockFile,
+            'clientSideKickoff'   => $clientSideKickoff,
+            'kickoffOverride'     => $kickoffOverride,
+            'kickoffMismatch'     => $kickoffMismatch,
+            'lockMismatch'        => $lockMismatch,
+        ]
+    ); ?>
 </div>

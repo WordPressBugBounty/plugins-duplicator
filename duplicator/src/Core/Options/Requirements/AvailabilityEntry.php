@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Duplicator\Core\Options\Requirements;
 
+use Closure;
+
 /**
  * Availability outcome of a single option value: the failed requirements and
  * the exclusion messages added by the availability filter. The value is
@@ -15,7 +17,7 @@ class AvailabilityEntry
     private $value;
     /** @var Requirement[] */
     private array $failedRequirements = [];
-    /** @var string[] */
+    /** @var array<int, string|Closure(): string> resolved lazily by getMessages() */
     private array $messages = [];
 
     /**
@@ -64,11 +66,11 @@ class AvailabilityEntry
      * Add an exclusion message not tied to a requirement
      * (used by the availability filter, e.g. managed host exclusions)
      *
-     * @param string $message The reason why the value is unavailable (can contain HTML)
+     * @param string|Closure(): string $message The reason why the value is unavailable (can contain HTML)
      *
      * @return void
      */
-    public function addMessage(string $message): void
+    public function addMessage($message): void
     {
         $this->messages[] = $message;
     }
@@ -90,7 +92,14 @@ class AvailabilityEntry
      */
     public function getMessages(): array
     {
-        return $this->messages;
+        $messages = [];
+        foreach ($this->messages as $index => $message) {
+            if ($message instanceof Closure) {
+                $this->messages[$index] = $message();
+            }
+            $messages[] = $this->messages[$index];
+        }
+        return $messages;
     }
 
     /**
@@ -110,6 +119,6 @@ class AvailabilityEntry
             }
             $reasons[] = $reason;
         }
-        return array_merge($reasons, $this->messages);
+        return array_merge($reasons, $this->getMessages());
     }
 }

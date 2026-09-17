@@ -412,20 +412,6 @@ class BuildFailureRemedies
                         DUPLICATOR_DUPLICATOR_DOCS_URL . 'how-to-resolve-zip-format-related-build-issues',
                         __('How to resolve "zip warning: No such file or directory"?', 'duplicator')
                     );
-            case DupliException::CODE_DUP_ARCHIVE_32BIT_LIMIT:
-                return Fix::notice(
-                    $key,
-                    $message,
-                    [
-                        __(
-                            'Backup build failure due to building a large Backup on 32 bit PHP.',
-                            'duplicator'
-                        ),
-                    ]
-                )->setDocReference(
-                    DUPLICATOR_DUPLICATOR_DOCS_URL . 'how-to-resolve-file-io-related-build-issues',
-                    __('How to resolve file I/O related build issues', 'duplicator')
-                );
             case DupliException::CODE_INTEGRITY_DB_INCOMPLETE:
             case DupliException::CODE_INTEGRITY_DB_TOO_SMALL:
                 return self::resolveIncompleteDb($key, $message, $package);

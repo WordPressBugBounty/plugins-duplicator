@@ -50,6 +50,9 @@ abstract class AbstractEntity extends AbstractGenericModel
             } else {
                 $value = $data[$prop->getName()];
             }
+            if (PHP_VERSION_ID < 80100) {
+                $prop->setAccessible(true);
+            }
             $prop->setValue($this, $value);
         }
     }

@@ -57,7 +57,10 @@ class HostGoDaddy implements ManagedHostInterface
         foreach ([PackageArchive::BUILD_MODE_SHELL_EXEC, PackageArchive::BUILD_MODE_ZIP_ARCHIVE] as $engine) {
             $availability->addMessage(
                 $engine,
-                __('This archive engine is disabled by the GoDaddy hosting policy. Use the DupArchive engine instead.', 'duplicator')
+                static fn(): string => __(
+                    'This archive engine is disabled by the GoDaddy hosting policy. Use the DupArchive engine instead.',
+                    'duplicator'
+                )
             );
         }
         return $availability;

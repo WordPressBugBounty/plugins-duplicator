@@ -61,7 +61,7 @@ $maxAjaxBackupsChecksMessage = sprintf(
 
     <div class="dup-settings-wrapper">
         <label class="lbl-larger">
-            <?php esc_html_e('Diagnostic Data', 'duplicator'); ?>
+            <?php esc_html_e('Diagnostic', 'duplicator'); ?>
         </label>
         <div class="margin-bottom-1">
             <button
@@ -96,6 +96,44 @@ $maxAjaxBackupsChecksMessage = sprintf(
                     ); ?>
                 <?php endif; ?>
             </p>
+            <?php if (CapMng::can(CapMng::CAP_CREATE, false)) { ?>
+                <table class="dupli-reset-opts">
+                    <tr valign="top">
+                        <td>
+                            <a
+                                type="button"
+                                class="dupli-store-fixed-btn button secondary hollow tiny margin-bottom-0"
+                                href="<?php echo esc_url(ToolsPageController::getInstance()->getRedetectServerActionUrl()); ?>">
+                                <?php esc_html_e("Test Server Detection", 'duplicator'); ?>
+                            </a>
+                        </td>
+                        <td>
+                            <?php esc_html_e(
+                                "Re-runs the server capability tests (process lock mode and kickoff self-request)
+                                and shows the results.",
+                                'duplicator'
+                            ); ?>
+                            <?php
+                            printf(
+                                esc_html_x(
+                                    'Override settings available in %1$sBackup Settings%2$s.',
+                                    '%1$s and %2$s are the opening and closing anchor tags',
+                                    'duplicator'
+                                ),
+                                '<a href="' . esc_url(SettingsPageController::getInstance()->getMenuLink(SettingsPageController::L2_SLUG_PACKAGE)) . '">',
+                                '</a>'
+                            );
+                            ?>
+                            <i
+                                class="fa-solid fa-question-circle fa-sm dark-gray-color"
+                                data-tooltip-title="<?php esc_attr_e('Test Server Detection', 'duplicator'); ?>"
+                                data-tooltip="<?php echo esc_attr($redetectServerTooltip); ?>"
+                                data-tooltip-width="400"></i>
+                            <div class="maring-bottom-1">&nbsp;</div>
+                        </td>
+                    </tr>
+                </table>
+            <?php } ?>
         </div>
         <?php if (CapMng::can(CapMng::CAP_CREATE, false)) { ?>
             <label class="lbl-larger">
@@ -197,40 +235,6 @@ $maxAjaxBackupsChecksMessage = sprintf(
                         <td>
                             <?php esc_html_e('Removes all build data from:', 'duplicator'); ?>&nbsp;
                             <b><?php echo esc_html(DUPLICATOR_SSDIR_PATH_TMP); ?></b>
-                        </td>
-                    </tr>
-                    <tr valign="top">
-                        <td>
-                            <a
-                                type="button"
-                                class="dupli-store-fixed-btn button secondary hollow tiny margin-bottom-0"
-                                href="<?php echo esc_url(ToolsPageController::getInstance()->getRedetectServerActionUrl()); ?>">
-                                <?php esc_html_e("Test Server Detection", 'duplicator'); ?>
-                            </a>
-                        </td>
-                        <td>
-                            <?php esc_html_e(
-                                "Re-runs the server capability tests (process lock mode and kickoff self-request)
-                                and shows the results.",
-                                'duplicator'
-                            ); ?>
-                            <?php
-                            printf(
-                                esc_html_x(
-                                    'Override settings available in %1$sBackup Settings%2$s.',
-                                    '%1$s and %2$s are the opening and closing anchor tags',
-                                    'duplicator'
-                                ),
-                                '<a href="' . esc_url(SettingsPageController::getInstance()->getMenuLink(SettingsPageController::L2_SLUG_PACKAGE)) . '">',
-                                '</a>'
-                            );
-                            ?>
-                            <i
-                                class="fa-solid fa-question-circle fa-sm dark-gray-color"
-                                data-tooltip-title="<?php esc_attr_e('Test Server Detection', 'duplicator'); ?>"
-                                data-tooltip="<?php echo esc_attr($redetectServerTooltip); ?>"
-                                data-tooltip-width="400"></i>
-                            <div class="maring-bottom-1">&nbsp;</div>
                         </td>
                     </tr>
                 <?php } ?>

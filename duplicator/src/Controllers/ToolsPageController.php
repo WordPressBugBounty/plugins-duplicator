@@ -16,6 +16,8 @@ use Duplicator\Core\Controllers\SubMenuItem;
 use Duplicator\Core\Views\TplMng;
 use Duplicator\Libs\Snap\SnapIO;
 use Duplicator\Models\ActivityLog\LogEventOrphanCleanup;
+use Duplicator\Models\DynamicGlobalEntity;
+use Duplicator\Package\ClientSideKick;
 use Duplicator\Package\DupPackage;
 use Duplicator\Package\PackageUtils;
 use Duplicator\Utils\AsyncSetupActions;
@@ -310,13 +312,16 @@ class ToolsPageController extends AbstractMenuPageController
         }
 
         DupLog::trace('Running server detection tests manually from Tools page');
-        $result = AsyncSetupActions::runDetection(true);
+        $result          = AsyncSetupActions::runDetection(true);
+        $kickoffOverride = DynamicGlobalEntity::getInstance()->getValString(ClientSideKick::KICKOFF_OVERRIDE_KEY);
 
         return [
-            'redetectRan'          => true,
-            'redetectLockSql'      => $result['lockResult']['sqlReliable'],
-            'redetectLockFile'     => $result['lockResult']['fileReliable'],
-            'redetectLoopbackPass' => $result['loopbackPass'],
+            'redetectRan'               => true,
+            'redetectLockSql'           => $result['lockResult']['sqlReliable'],
+            'redetectLockFile'          => $result['lockResult']['fileReliable'],
+            'redetectLoopbackPass'      => $result['loopbackPass'],
+            'redetectClientSideKickoff' => ClientSideKick::isClientSideKickoffMode(),
+            'redetectKickoffOverride'   => $kickoffOverride,
         ];
     }
 

@@ -856,7 +856,6 @@ $messageText = $tplMng->render('admin_pages/packages/scan/error_message', [], fa
                 '#data-srv-php-openbase': data.SRV.PHP.openbase || !data.ARC.PathsOutOpenbaseDir.length,
                 '#data-srv-php-maxtime': data.SRV.PHP.maxtime,
                 '#data-srv-php-minmemory': data.SRV.PHP.minMemory,
-                '#data-srv-php-arch64bit': data.SRV.PHP.arch64bit,
                 '#data-srv-php-mysqli': data.SRV.PHP.mysqli,
                 '#data-srv-php-openssl': data.SRV.PHP.openssl,
                 '#data-srv-php-allowurlfopen': data.SRV.PHP.allowurlfopen,

@@ -7,7 +7,6 @@ use Duplicator\Utils\Logging\DupLog;
 use Duplicator\Core\Constants;
 use Duplicator\Libs\DupArchive\DupArchiveEngine;
 use Duplicator\Libs\DupArchive\States\DupArchiveExpandState;
-use Duplicator\Libs\Snap\Snap32BitSizeLimitException;
 use Duplicator\Libs\Snap\SnapIO;
 use Duplicator\Libs\Snap\SnapServer;
 use Duplicator\Libs\Snap\SnapString;
@@ -171,13 +170,6 @@ class PackageDupArchive
                     DupLog::trace("Done build phase.");
                 }
             }
-        } catch (Snap32BitSizeLimitException $ex) {
-            throw new DupliException(
-                'Backup build failure due to building a large Backup on 32 bit PHP.',
-                DupliException::CODE_DUP_ARCHIVE_32BIT_LIMIT,
-                __('The backup is too large to build on 32 bit PHP.', 'duplicator'),
-                $ex
-            );
         } catch (DupliException $ex) {
             throw $ex;
         } catch (Exception $ex) {

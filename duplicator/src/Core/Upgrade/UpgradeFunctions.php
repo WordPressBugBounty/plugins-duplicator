@@ -18,6 +18,7 @@ use Duplicator\Models\Storages\StoragesUtil;
 use Duplicator\Models\FixesEntity;
 use Duplicator\Models\TemplateEntity;
 use Duplicator\Package\AbstractPackage;
+use Duplicator\Package\ClientSideKick;
 use Duplicator\Package\DupPackage;
 use Duplicator\Utils\AsyncSetupActions;
 use Duplicator\Utils\Crypt\CryptBlowfish;
@@ -170,6 +171,20 @@ class UpgradeFunctions
      */
     public static function scheduleAsyncSetup($oldVariant, $oldVersion, $newVariant, $newVersion): void
     {
+        if (AsyncSetupActions::isServerDetected()) {
+            $dGlobal = DynamicGlobalEntity::getInstance();
+            if (
+                $dGlobal->getValString(ClientSideKick::KICKOFF_OVERRIDE_KEY) !== 'auto' ||
+                !$dGlobal->getValBool(ClientSideKick::KICKOFF_DGLOBAL_KEY)
+            ) {
+                return;
+            }
+
+            ClientSideKick::resetLoopbackCache();
+            $dGlobal->removeVal(ClientSideKick::KICKOFF_DGLOBAL_KEY, false);
+            $dGlobal->removeVal(AsyncSetupActions::SERVER_DETECTED_KEY, true);
+        }
+
         AsyncSetupActions::scheduleDetection();
     }
 

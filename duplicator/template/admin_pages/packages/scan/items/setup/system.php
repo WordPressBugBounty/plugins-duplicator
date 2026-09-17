@@ -22,7 +22,6 @@ $isCurlEnabled    = SnapUtil::isCurlEnabled() ? __('True', 'duplicator') : __('F
 $openBaseDir      = SnapOpenBasedir::isEnabled() ? esc_html__('on', 'duplicator') : esc_html__('off', 'duplicator');
 $maxExecutionTime = set_time_limit(0) === true ? 0 : @ini_get('max_execution_time');
 $memoryLimit      = @ini_get('memory_limit');
-$architecture     = SnapUtil::getArchitectureString();
 ?>
 
 <div class="scan-item scan-item-first">
@@ -138,32 +137,6 @@ $architecture     = SnapUtil::getArchitectureString();
             ); ?>
         </div>
 
-        <hr size="1" />
-        <span id="data-srv-php-arch64bit"></span>&nbsp;
-        <b><?php esc_html_e('PHP 64 Bit Architecture', 'duplicator'); ?>:</b>&nbsp; <?php echo esc_html($architecture); ?><br />
-        <div class="scan-system-subnote">
-            <?php
-            echo wp_kses(
-                sprintf(
-                    _x(
-                        'Servers that run a PHP 32-bit architecture are not capable of creating Backups larger than 2GB.
-                    If you need to create a Backup that is larger than 2GB in size talk with your host or server admin
-                    to change your version of PHP to 64-bit. %1$s[FAQ item]%2$s',
-                        '1: link start, 2: link end',
-                        'duplicator'
-                    ),
-                    "<i><a href='" . DUPLICATOR_DUPLICATOR_DOCS_URL . "how-to-resolve-file-io-related-build-issues' target='_blank'>",
-                    "</a></i>"
-                ),
-                [
-                    'a' => [
-                        'href'   => [],
-                        'target' => [],
-                    ],
-                    'i' => [],
-                ]
-            ); ?>
-        </div>
         <br />
     </div>
 </div>

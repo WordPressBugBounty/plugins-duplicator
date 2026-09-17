@@ -75,7 +75,6 @@ class DupliException extends Exception
 
     const CODE_DUP_ARCHIVE_ADD_FAILED        = 150;
     const CODE_DUP_ARCHIVE_VALIDATION_FAILED = 151;
-    const CODE_DUP_ARCHIVE_32BIT_LIMIT       = 152;
     const CODE_DUP_ARCHIVE_RETRY_EXHAUSTED   = 153;
     const CODE_DUP_ARCHIVE_TRUNCATE_FAILED   = 154;
 
@@ -110,6 +109,7 @@ class DupliException extends Exception
         self::CODE_DISK_FULL,
         self::CODE_ZIP_NOT_AVAILABLE,
         self::CODE_SCAN_SOURCE_UNREADABLE,
+        self::CODE_STORAGE_INVALID,
     ];
 
     /**

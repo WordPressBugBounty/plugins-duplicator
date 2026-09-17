@@ -1,5 +1,7 @@
 <?php
 
+use Duplicator\Core\Options\Rules\ArchiveEngineRule;
+
 defined('ABSPATH') || exit;
 
 /**
@@ -65,6 +67,23 @@ $excludableOptions = $tplMng->getDataValueArrayRequired('excludableOptions');
                                 <?php endforeach; ?>
                             </div>
                         </div>
+                        <?php if ($group['key'] === ArchiveEngineRule::OPTION_KEY && $tplMng->getDataValueBool('isLiteSpeed')) : ?>
+                            <p class="black-color display-flex">
+                                <i class="fa-solid fa-triangle-exclamation warning-color margin-right-half" aria-hidden="true"></i>
+                                <span>
+                                    <?php esc_html_e(
+                                        'Shell Zip is not selected by default on LiteSpeed web servers due to its high failure rate
+                                        and possible interruptions of the zip process by the server.',
+                                        'duplicator'
+                                    ); ?>
+                                    <br>
+                                    <?php esc_html_e(
+                                        'You can still select it manually, but it is not recommended.',
+                                        'duplicator'
+                                    ); ?>
+                                </span>
+                            </p>
+                        <?php endif; ?>
                     <?php endforeach; ?>
                 </fieldset>
             <?php endif; ?>

@@ -104,11 +104,15 @@ final class AutoTuneManager
     /**
      * Start a new session and launch attempt 1.
      *
-     * @param array<string, array<int|string|bool>> $userExcludedValues Option key => values refused by the user
+     * Callers that collect no choice from the user (a direct start, a retry,
+     * automation) pass null and get the host policy defaults of
+     * AutoTuneDetector::getDefaultExcludedValues().
+     *
+     * @param ?array<string, array<int|string|bool>> $userExcludedValues Option key => values refused by the user, null when no choice was collected
      *
      * @return void
      */
-    public static function start(array $userExcludedValues = []): void
+    public static function start(?array $userExcludedValues = null): void
     {
         $lock = self::createLock();
         if (!$lock->lock()) {
@@ -123,6 +127,17 @@ final class AutoTuneManager
             if (PackageUtils::isBackupCreationBlocked($blockMessage)) {
                 throw new Exception((string) $blockMessage);
             }
+
+            // Check backup requirements before starting the AutoTune session.
+            $requirementMessages = [];
+            foreach (OptionsManager::getInstance()->validateConfig()->getFailedBaseline() as $requirement) {
+                $requirementMessages[] = wp_strip_all_tags($requirement->getFailMessage());
+            }
+            if ($requirementMessages !== []) {
+                throw new Exception(implode("\n", $requirementMessages));
+            }
+
+            $userExcludedValues ??= AutoTuneDetector::getDefaultExcludedValues();
             self::assertValidUserExclusions($userExcludedValues);
 
             $template          = TemplateEntity::getDefaultTemplate();
