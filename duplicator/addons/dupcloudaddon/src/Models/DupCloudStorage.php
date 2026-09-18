@@ -22,6 +22,7 @@ use Duplicator\Package\Restore\BackupPackage;
 use Duplicator\Package\FullBackupStatus;
 use Duplicator\Package\Storage\UploadInfo;
 use Exception;
+use Throwable;
 
 /**
  * @property ?DupCloudStorageAdapter $adapter
@@ -683,7 +684,7 @@ class DupCloudStorage extends AbstractStorageEntity implements StorageAuthInterf
 
             $params = (new BackupPackage($archivePath, $package))->getOverwriteParams();
             return PackageUtils::writeOverwriteParams(DUPLICATOR_SSDIR_PATH_TMP, $package->getPrimaryInternalHash(), $params);
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             DupLog::infoTrace('Failed to create restore Backup config file: ' . $e->getMessage());
             return false;
         }

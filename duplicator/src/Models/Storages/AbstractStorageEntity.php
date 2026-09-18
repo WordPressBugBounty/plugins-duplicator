@@ -994,18 +994,18 @@ abstract class AbstractStorageEntity extends AbstractEntity implements ModelMigr
      */
     public function purgeOldPackages(array $exclude = [])
     {
-        if ($this->config['max_packages'] <= 0) {
-            return [];
-        }
-
-        DupLog::infoTrace("Attempting to purge old Backups at " . $this->name . '[ID: ' . $this->id . '] type: ' . static::getSTypeName());
-
-        $result        = [];
-        $global        = GlobalEntity::getInstance();
-        $adapter       = $this->getAdapter();
-        $fullFilesList = $adapter->scanDir('', true, false);
-        $filesToPurge  = self::getPurgeFileList($fullFilesList, $this->config['max_packages'], $exclude);
         try {
+            if ($this->config['max_packages'] <= 0) {
+                return [];
+            }
+
+            DupLog::infoTrace("Attempting to purge old Backups at " . $this->name . '[ID: ' . $this->id . '] type: ' . static::getSTypeName());
+
+            $result        = [];
+            $global        = GlobalEntity::getInstance();
+            $adapter       = $this->getAdapter();
+            $fullFilesList = $adapter->scanDir('', true, false);
+            $filesToPurge  = self::getPurgeFileList($fullFilesList, $this->config['max_packages'], $exclude);
             foreach ($filesToPurge as $file) {
                 if (!$adapter->delete($file)) {
                     DupLog::infoTrace("Failed to purge backup from remote storage: " . $file);
@@ -1030,7 +1030,7 @@ abstract class AbstractStorageEntity extends AbstractEntity implements ModelMigr
                     $global->getPurgeBackupRecords() === self::BACKUP_RECORDS_REMOVE_ALL
                 );
             }
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             DupLog::infoTraceException($e, "FAIL: purge Backup for storage " . $this->name . '[ID: ' . $this->id . '] type:' . static::getStypeName());
             return false;
         }

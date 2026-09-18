@@ -13,11 +13,12 @@ use VendorDuplicator\phpseclib3\Crypt\Blowfish;
 
 class CryptBlowfish implements CryptInterface
 {
-    const AUTH_DEFINE_NAME_OLD = 'DUP_SECURE_KEY'; // OLD define name
-    const AUTH_DEFINE_NAME     = 'DUPLICATOR_AUTH_KEY';
-    const AUTO_SALT_LEN        = 32;
-    const CBC_MARKER           = 'CBC:'; // Marker to identify CBC encrypted strings
-    const IV_LENGTH            = 8; // Blowfish block size in bytes
+    const AUTH_DEFINE_NAME_OLD  = 'DUP_SECURE_KEY'; // OLD define name
+    const AUTH_DEFINE_NAME      = 'DUPLICATOR_AUTH_KEY';
+    const AUTO_SALT_LEN         = 32;
+    const CBC_MARKER            = 'CBC:'; // Marker to identify CBC encrypted strings
+    const IV_LENGTH             = 8; // Blowfish block size in bytes
+    const MCRYPT_MAX_KEY_LENGTH = 56; // Blowfish key length cap enforced by libmcrypt
 
     /** @var string */
     protected static $tempDefinedKey;
@@ -230,22 +231,92 @@ class CryptBlowfish implements CryptInterface
                 $key = self::getDefaultKey();
             }
 
-            // Check if this is CBC format (new) or ECB format (legacy)
-            $isCbc = strpos($string, self::CBC_MARKER) === 0;
-
-            $decrypted_value = $isCbc ? self::decryptCbc($string, $key) : self::decryptEcbLegacy($string, $key);
-
-            $decrypted_value = str_replace("\0", '', $decrypted_value);
-
-            if ($removeSalt) {
-                $decrypted_value = substr($decrypted_value, self::AUTO_SALT_LEN, (strlen($decrypted_value) - (self::AUTO_SALT_LEN * 2)));
-            }
+            $decrypted_value = self::decryptWithKey($string, $key, $removeSalt);
         } catch (Throwable $e) {
             DupLog::traceException($e, "Error decrypting string");
             return '';
         }
 
-        return (string) $decrypted_value;
+        return $decrypted_value;
+    }
+
+    /**
+     * Decrypt a stored value, recovering values written with the key truncated by the mcrypt engine
+     *
+     * @param string $string     encrypted string
+     * @param string $key        encryption key
+     * @param bool   $removeSalt if true remove HASH salt from string
+     *
+     * @return string decrypted value
+     *
+     * @throws Exception if the stored format is invalid
+     */
+    private static function decryptWithKey(string $string, string $key, bool $removeSalt): string
+    {
+        $decrypted = self::decryptRaw($string, $key);
+
+        // Checked on the whole block, salt included, so even a one-character
+        // value is judged on enough bytes to tell text from random output.
+        if (self::isKeyBeyondMcryptLimit($key) && !self::isTextPlaintext($decrypted)) {
+            $fallback = self::decryptRaw($string, substr($key, 0, self::MCRYPT_MAX_KEY_LENGTH));
+            if (self::isTextPlaintext($fallback)) {
+                $decrypted = $fallback;
+            }
+        }
+
+        if ($removeSalt) {
+            $decrypted = substr($decrypted, self::AUTO_SALT_LEN, (strlen($decrypted) - (self::AUTO_SALT_LEN * 2)));
+        }
+
+        return (string) $decrypted;
+    }
+
+    /**
+     * Decrypt a stored value with one key, salt included, detecting the CBC or legacy ECB format from the string
+     *
+     * @param string $string encrypted string
+     * @param string $key    encryption key
+     *
+     * @return string decrypted block without padding
+     *
+     * @throws Exception if the stored format is invalid
+     */
+    private static function decryptRaw(string $string, string $key): string
+    {
+        $isCbc = strpos($string, self::CBC_MARKER) === 0;
+
+        $decrypted = $isCbc ? self::decryptCbc($string, $key) : self::decryptEcbLegacy($string, $key);
+
+        return str_replace("\0", '', $decrypted);
+    }
+
+    /**
+     * True when stored values may have been encrypted with a truncated key.
+     *
+     * Before the engine was fixed to PHP, hosts with the mcrypt extension silently
+     * encrypted with the first bytes of a longer key because libmcrypt caps the
+     * Blowfish key length.
+     *
+     * @param string $key encryption key
+     *
+     * @return bool
+     */
+    private static function isKeyBeyondMcryptLimit(string $key): bool
+    {
+        return strlen($key) > self::MCRYPT_MAX_KEY_LENGTH;
+    }
+
+    /**
+     * Blowfish returns random bytes on a key mismatch instead of failing.
+     * Every value this class encrypts is text, so valid UTF-8 tells a real plaintext from garbage.
+     *
+     * @param string $value decrypted value
+     *
+     * @return bool
+     */
+    private static function isTextPlaintext(string $value): bool
+    {
+        return preg_match('//u', $value) === 1;
     }
 
     /**

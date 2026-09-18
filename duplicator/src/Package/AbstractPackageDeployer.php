@@ -32,6 +32,7 @@ use Duplicator\Libs\WpUtils\WpArchiveUtils;
 use Duplicator\Core\Addons\AddonsManager;
 use Duplicator\Utils\ZipArchiveExtended;
 use Exception;
+use Throwable;
 use ZipArchive;
 
 /**
@@ -206,6 +207,13 @@ abstract class AbstractPackageDeployer
     {
         switch ($this->ext) {
             case 'zip':
+                if (!ZipArchiveExtended::isPhpZipAvailable()) {
+                    throw new DupliException(
+                        'ZipArchive PHP module is not installed/enabled.',
+                        DupliException::CODE_ZIP_NOT_AVAILABLE,
+                        __('ZipArchive PHP module is not installed/enabled. The current Backup cannot be opened.', 'duplicator')
+                    );
+                }
                 $zip = new ZipArchive();
                 if ($zip->open($this->archive) !== true) {
                     throw new Exception('Cannot open the ZipArchive file.  Please see the online FAQ\'s for additional help.' . $this->archive);
@@ -281,6 +289,13 @@ abstract class AbstractPackageDeployer
 
         switch ($this->ext) {
             case 'zip':
+                if (!ZipArchiveExtended::isPhpZipAvailable()) {
+                    throw new DupliException(
+                        'ZipArchive PHP module is not installed/enabled.',
+                        DupliException::CODE_ZIP_NOT_AVAILABLE,
+                        __('ZipArchive PHP module is not installed/enabled. The current Backup cannot be opened.', 'duplicator')
+                    );
+                }
                 $zip = new ZipArchive();
                 if ($zip->open($this->archive) !== true) {
                     throw new Exception('Cannot open the ZipArchive file.  Please see the online FAQ\'s for additional help.' . $this->archive);
@@ -1629,7 +1644,7 @@ abstract class AbstractPackageDeployer
         foreach (static::getArchiveList() as $archivePath) {
             try {
                 $objects[] = new static($archivePath); // @phpstan-ignore new.static
-            } catch (Exception $e) {
+            } catch (Throwable $e) {
                 DupLog::traceObject('Can\'t read Backup and continue', $e);
             }
         }

@@ -8,7 +8,7 @@ use Duplicator\Package\AbstractPackage;
 use Duplicator\Package\Storage\UploadInfo;
 use Duplicator\Libs\Snap\SnapIO;
 use Duplicator\Libs\Snap\SnapUtil;
-use Exception;
+use Throwable;
 use wpdb;
 
 class DefaultLocalStorage extends LocalStorage
@@ -217,19 +217,19 @@ class DefaultLocalStorage extends LocalStorage
      */
     public function purgeOldPackages(array $keepList = [])
     {
-        if (($packagesList = parent::purgeOldPackages($keepList)) === false) {
-            return false;
-        }
-
-        $global = GlobalEntity::getInstance();
-        if (
-            $global->getPurgeBackupRecords() !== self::BACKUP_RECORDS_REMOVE_DEFAULT ||
-            count($packagesList) == 0
-        ) {
-            return $packagesList;
-        }
-
         try {
+            if (($packagesList = parent::purgeOldPackages($keepList)) === false) {
+                return false;
+            }
+
+            $global = GlobalEntity::getInstance();
+            if (
+                $global->getPurgeBackupRecords() !== self::BACKUP_RECORDS_REMOVE_DEFAULT ||
+                count($packagesList) == 0
+            ) {
+                return $packagesList;
+            }
+
             DupLog::infoTrace("Clean up backup table removing old Backups.");
 
             /** @var wpdb $wpdb*/
@@ -247,7 +247,7 @@ class DefaultLocalStorage extends LocalStorage
             );
             $sql         = $wpdb->prepare("DELETE FROM " . $table . " WHERE created <= %s AND status >= %d", $max_created, AbstractPackage::STATUS_COMPLETE);
             $wpdb->query($sql);
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             DupLog::infoTraceException($e, "FAIL: purge Backup for storage " . $this->name . '[ID: ' . $this->id . '] type:' . static::getStypeName());
             return false;
         }

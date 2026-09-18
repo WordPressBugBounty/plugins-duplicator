@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-17T15:36:22+00:00\n"
+"POT-Creation-Date: 2026-09-18T19:02:20+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: duplicator\n"
@@ -117,75 +117,75 @@ msgid ""
 "                    space available in the %1$s%3$s%2$s storage location."
 msgstr ""
 
-#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:55
-#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:222
+#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:56
+#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:223
 #: addons/dupcloudaddon/template/dupcloudaddon/configs/general_settings.php:23
 msgid "Duplicator Cloud"
 msgstr ""
 
-#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:154
+#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:155
 #: src/Models/Storages/AbstractStorageEntity.php:1462
 #, php-format
 msgid "Testing %s storage..."
 msgstr ""
 
-#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:158
+#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:159
 #: src/Models/Storages/AbstractStorageEntity.php:1466
 #, php-format
 msgid "Storage %s isn't supported on current server"
 msgstr ""
 
-#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:163
+#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:164
 msgid "Check if storage is ready to use."
 msgstr ""
 
-#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:168
+#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:169
 #, php-format
 msgid "Storage %1$s is not valid message %2$s"
 msgstr ""
 
-#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:175
 #: addons/dupcloudaddon/src/Models/DupCloudStorage.php:176
+#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:177
 msgid "Storage test successful."
 msgstr ""
 
-#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:180
+#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:181
 #, php-format
 msgid "Error during storage test: %s"
 msgstr ""
 
-#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:260
+#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:261
 #: addons/dupcloudaddon/template/dupcloudaddon/connect/storage_auth.php:134
 msgid "Manage Backups"
 msgstr ""
 
-#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:278
+#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:279
 #: addons/dupcloudaddon/template/dupcloudaddon/connect/storage_auth.php:34
 msgid "Explore plans and features"
 msgstr ""
 
-#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:303
+#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:304
 msgid "Not connected."
 msgstr ""
 
-#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:375
+#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:376
 msgid "No access token provided"
 msgstr ""
 
-#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:445
+#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:446
 msgid "Error revoking authorization."
 msgstr ""
 
-#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:456
+#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:457
 msgid "Duplicator Cloud is disconnected successfully."
 msgstr ""
 
-#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:516
+#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:517
 msgid "Duplicator Cloud Storage was updated."
 msgstr ""
 
-#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:735
-#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:745
+#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:736
+#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:746
 #: src/Package/AutoTune/AutoTuneDetector.php:506
 msgid "unknown"
 msgstr ""
@@ -3052,7 +3052,7 @@ msgstr ""
 
 #: src/Models/ActivityLog/LogEventBackupCreate.php:596
 #: src/Models/ActivityLog/LogEventWebsitesScan.php:132
-#: src/Package/AbstractPackageDeployer.php:1056
+#: src/Package/AbstractPackageDeployer.php:1071
 #, php-format
 msgid "Error: %s"
 msgstr ""
@@ -4191,87 +4191,89 @@ msgstr ""
 msgid "MySQL Server Host: <b>%1$s</b> isn't a valid host"
 msgstr ""
 
-#: src/Package/AbstractPackageDeployer.php:148
-#: src/Package/AbstractPackageDeployer.php:1189
+#: src/Package/AbstractPackageDeployer.php:149
+#: src/Package/AbstractPackageDeployer.php:214
+#: src/Package/AbstractPackageDeployer.php:296
+#: src/Package/AbstractPackageDeployer.php:1204
 #: src/Utils/ZipArchiveExtended.php:382
 msgid "ZipArchive PHP module is not installed/enabled. The current Backup cannot be opened."
 msgstr ""
 
-#: src/Package/AbstractPackageDeployer.php:250
+#: src/Package/AbstractPackageDeployer.php:258
 msgid "PHP configuration is preventing extraction of the encrypted DupArchive."
 msgstr ""
 
-#: src/Package/AbstractPackageDeployer.php:252
+#: src/Package/AbstractPackageDeployer.php:260
 #, php-format
 msgctxt "%1$s and %2$s represents the opening and closing HTML tags for an anchor or link"
 msgid "To enable encryption extraction, contact your host and make sure they have enabled the %1$sOpenSSL PHP module%2$s."
 msgstr ""
 
-#: src/Package/AbstractPackageDeployer.php:326
+#: src/Package/AbstractPackageDeployer.php:341
 msgid "Invalid password"
 msgstr ""
 
-#: src/Package/AbstractPackageDeployer.php:583
+#: src/Package/AbstractPackageDeployer.php:598
 msgid "Duplicator cannot launch the deploy because on this Server it isn't possible to determine installer path:"
 msgstr ""
 
-#: src/Package/AbstractPackageDeployer.php:606
+#: src/Package/AbstractPackageDeployer.php:621
 msgid "It isn't possible to create mu-plugin for bridge install"
 msgstr ""
 
-#: src/Package/AbstractPackageDeployer.php:1055
+#: src/Package/AbstractPackageDeployer.php:1070
 msgid "The imported Backup is invalid. Please create another Backup and retry the import."
 msgstr ""
 
 #. translators: %s: plugin name
-#: src/Package/AbstractPackageDeployer.php:1062
+#: src/Package/AbstractPackageDeployer.php:1077
 #, php-format
 msgid ""
 "This error can be caused by importing a backup made with a new version of %s to an\n"
 "                    older version of the plugin. Please update the plugin to the latest version and try again."
 msgstr ""
 
-#: src/Package/AbstractPackageDeployer.php:1073
+#: src/Package/AbstractPackageDeployer.php:1088
 #, php-format
 msgctxt "%1$s and %2$s represents the opening and closing HTML tags for an anchor or link"
 msgid "For more information see %1$s[this FAQ item]%2$s"
 msgstr ""
 
-#: src/Package/AbstractPackageDeployer.php:1090
+#: src/Package/AbstractPackageDeployer.php:1105
 msgid "On this server it is possible to import only Backups created on the same server. Migration option isn't available."
 msgstr ""
 
 #. translators: %1$s: plugin name, %2$s: minimum version
-#: src/Package/AbstractPackageDeployer.php:1106
+#: src/Package/AbstractPackageDeployer.php:1121
 #, php-format
 msgid "Backup is incompatible or too old. Only Backups created with %1$s v%2$s or higher can be imported."
 msgstr ""
 
-#: src/Package/AbstractPackageDeployer.php:1115
+#: src/Package/AbstractPackageDeployer.php:1130
 #, php-format
 msgctxt "%1$s and %2$s represents the opening and closing HTML tags for an anchor or link"
 msgid "If you want to install this Backup then please use the \"classic installer.php\" overwrite method %1$sexplained here%2$s."
 msgstr ""
 
-#: src/Package/AbstractPackageDeployer.php:1128
+#: src/Package/AbstractPackageDeployer.php:1143
 #, php-format
 msgid ""
 "Due to security blocks on hosting the bridge installation mode is the only one available.\n"
 "                    This mode is possible only with Backups created with PRO version %s or later."
 msgstr ""
 
-#: src/Package/AbstractPackageDeployer.php:1139
+#: src/Package/AbstractPackageDeployer.php:1154
 msgid "The Backup lacks some of the installer files."
 msgstr ""
 
-#: src/Package/AbstractPackageDeployer.php:1158
+#: src/Package/AbstractPackageDeployer.php:1173
 #, php-format
 msgid ""
 "This Backup is importable but the installation type \"import subsite in multisite\" isn't available\n"
 "                    because it was created with a version of Duplicator prior to %s"
 msgstr ""
 
-#: src/Package/AbstractPackageDeployer.php:1167
+#: src/Package/AbstractPackageDeployer.php:1182
 #, php-format
 msgid "To use this type of installation use a Backup created with version %s +"
 msgstr ""
