@@ -1236,6 +1236,10 @@ HEADER;
             }
 
             if (!SnapIO::rcopy($extraItem['sourcePath'], $destPath)) {
+                $error = error_get_last();
+                if (SnapIO::isDiskFullError($error !== null ? $error['message'] : '')) {
+                    throw DupliException::diskFull();
+                }
                 throw DupliException::fromLastError(
                     "Error copying an installer file to the temporary folder.\n" .
                     'From ' . $extraItem['sourcePath'] . ' to ' . $destPath,

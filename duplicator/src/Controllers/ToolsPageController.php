@@ -131,6 +131,7 @@ class ToolsPageController extends AbstractMenuPageController
                     'status' => wp_create_nonce('duplicator_autotune_status'),
                 ],
                 'pollInterval'   => 5000,
+                'clientKickoff'  => ClientSideKick::isClientSideKickoffMode(),
                 'initialSession' => (new AutoTunePageData())->getSessionData(),
                 'i18n'           => [
                     'aborted'              => __('AutoTune session aborted.', 'duplicator'),

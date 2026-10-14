@@ -266,9 +266,14 @@ class DbBuildIterator implements Iterator
     public function removeCounterFile(): void
     {
         if ($this->storeProgressFile !== null) {
-            SnapIO::rm($this->storeProgressFile);
-            // Clean up the recovery backup written alongside the primary progress file.
-            SnapIO::rm($this->getBackupPath());
+            // Also clean up the recovery backup. Best-effort: a leftover temporary file must not fail the build.
+            foreach ([$this->storeProgressFile, $this->getBackupPath()] as $path) {
+                try {
+                    SnapIO::rm($path);
+                } catch (Exception $e) {
+                    DupLog::traceError('Could not remove database progress file: ' . $e->getMessage());
+                }
+            }
         }
         $this->isStoreProgress   = false;
         $this->storeProgressFile = null;

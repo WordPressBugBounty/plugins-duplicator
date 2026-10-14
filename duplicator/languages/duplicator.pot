@@ -9,14 +9,15 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-29T17:05:18+00:00\n"
+"POT-Creation-Date: 2026-10-14T16:33:45+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.12.0\n"
+"X-Generator: WP-CLI 3.0.0-alpha-01b1b10\n"
 "X-Domain: duplicator\n"
 
 #. Plugin Name of the plugin
 #. Author of the plugin
-#: duplicator.php
+#: duplicator.php:4
+#: duplicator.php:11
 #: src/Views/DashboardWidget.php:46
 #: template/admin_pages/packages/details/parts/general_card.php:169
 #: template/admin_pages/packages/row_parts/details_package.php:94
@@ -25,12 +26,13 @@ msgstr ""
 
 #. Plugin URI of the plugin
 #. Author URI of the plugin
-#: duplicator.php
+#: duplicator.php:5
+#: duplicator.php:12
 msgid "https://duplicator.com/"
 msgstr ""
 
 #. Description of the plugin
-#: duplicator.php
+#: duplicator.php:6
 msgid "Migrate and backup a copy of your WordPress files and database. Duplicate and move a site from one location to another quickly."
 msgstr ""
 
@@ -2186,7 +2188,7 @@ msgid "Settings"
 msgstr ""
 
 #: src/Controllers/SettingsPageController.php:91
-#: src/Controllers/ToolsPageController.php:203
+#: src/Controllers/ToolsPageController.php:204
 #: src/Models/ActivityLog/LogEventSettingsChange.php:257
 #: src/Package/BuildRequirements.php:167
 #: template/admin_pages/packages/details/parts/general_card.php:82
@@ -2483,64 +2485,64 @@ msgstr ""
 msgid "Tools"
 msgstr ""
 
-#: src/Controllers/ToolsPageController.php:136
+#: src/Controllers/ToolsPageController.php:137
 msgid "AutoTune session aborted."
 msgstr ""
 
-#: src/Controllers/ToolsPageController.php:137
+#: src/Controllers/ToolsPageController.php:138
 msgid "Abort the running AutoTune session?"
 msgstr ""
 
-#: src/Controllers/ToolsPageController.php:138
-msgid "Start AutoTune? Backup settings will be modified."
-msgstr ""
-
 #: src/Controllers/ToolsPageController.php:139
-#, php-format
-msgid "Attempt %1$d: %2$s"
+msgid "Start AutoTune? Backup settings will be modified."
 msgstr ""
 
 #: src/Controllers/ToolsPageController.php:140
 #, php-format
-msgid "Test Backup #%d"
+msgid "Attempt %1$d: %2$s"
 msgstr ""
 
 #: src/Controllers/ToolsPageController.php:141
 #, php-format
-msgid "was %s"
+msgid "Test Backup #%d"
 msgstr ""
 
 #: src/Controllers/ToolsPageController.php:142
-msgid "unchanged"
+#, php-format
+msgid "was %s"
 msgstr ""
 
 #: src/Controllers/ToolsPageController.php:143
-msgid "The AutoTune session was aborted"
+msgid "unchanged"
 msgstr ""
 
 #: src/Controllers/ToolsPageController.php:144
+msgid "The AutoTune session was aborted"
+msgstr ""
+
+#: src/Controllers/ToolsPageController.php:145
 msgid "AutoTune could not find a working configuration"
 msgstr ""
 
-#: src/Controllers/ToolsPageController.php:204
+#: src/Controllers/ToolsPageController.php:205
 #: src/Package/PackageUtils.php:453
 #: template/admin_pages/packages/package_create_button.php:58
 msgid "AutoTune"
 msgstr ""
 
-#: src/Controllers/ToolsPageController.php:205
+#: src/Controllers/ToolsPageController.php:206
 msgid "Server Info"
 msgstr ""
 
-#: src/Controllers/ToolsPageController.php:206
+#: src/Controllers/ToolsPageController.php:207
 msgid "Duplicator Logs"
 msgstr ""
 
-#: src/Controllers/ToolsPageController.php:207
+#: src/Controllers/ToolsPageController.php:208
 msgid "PHP Logs"
 msgstr ""
 
-#: src/Controllers/ToolsPageController.php:208
+#: src/Controllers/ToolsPageController.php:209
 msgid "AI"
 msgstr ""
 
@@ -4660,20 +4662,26 @@ msgstr ""
 msgid "The next AutoTune attempt could not be started."
 msgstr ""
 
-#: src/Package/AutoTune/AutoTuneManager.php:731
+#: src/Package/AutoTune/AutoTuneManager.php:728
+msgid ""
+"The test Backup could not start because the configuration does not meet the build requirements.\n"
+"                        Check the Backup log for the failed requirements."
+msgstr ""
+
+#: src/Package/AutoTune/AutoTuneManager.php:733
 #: src/Views/AutoTunePageData.php:560
 msgid "The test Backup failed without reporting the cause."
 msgstr ""
 
-#: src/Package/AutoTune/AutoTuneManager.php:979
+#: src/Package/AutoTune/AutoTuneManager.php:987
 msgid "AutoTune stopped because an internal transition failed."
 msgstr ""
 
-#: src/Package/AutoTune/AutoTuneManager.php:1030
+#: src/Package/AutoTune/AutoTuneManager.php:1038
 msgid "One of the AutoTune exclusions is not refusable."
 msgstr ""
 
-#: src/Package/AutoTune/AutoTuneManager.php:1065
+#: src/Package/AutoTune/AutoTuneManager.php:1073
 msgid "The default template encrypts the archive:"
 msgstr ""
 
@@ -5256,15 +5264,15 @@ msgstr ""
 msgid "Could not create the temporary folder for the installer files."
 msgstr ""
 
-#: src/Package/Create/PackInstaller.php:1243
+#: src/Package/Create/PackInstaller.php:1247
 msgid "Could not copy an installer file to the temporary folder."
 msgstr ""
 
-#: src/Package/Create/PackInstaller.php:1289
+#: src/Package/Create/PackInstaller.php:1293
 msgid "The shell zip command failed while adding the installer files to the archive."
 msgstr ""
 
-#: src/Package/Create/PackInstaller.php:1462
+#: src/Package/Create/PackInstaller.php:1466
 msgid "The backup failed while writing an installer file. Check the backup log for details."
 msgstr ""
 

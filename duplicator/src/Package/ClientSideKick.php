@@ -78,11 +78,25 @@ class ClientSideKick
             return;
         }
 
-        // Only register enqueue hooks if client-side kickoff is enabled for active package
-        if (self::isClientSideKickoffEnabled()) {
-            add_action('wp_enqueue_scripts', [self::class, 'enqueueKickoffScript']);
-            add_action('admin_enqueue_scripts', [self::class, 'enqueueKickoffScript']);
+        // Decided at enqueue time, not here: a Backup created later in this request
+        // (e.g. the manual build confirm) must get the script on the page it renders.
+        add_action('wp_enqueue_scripts', [self::class, 'maybeEnqueueKickoffScript']);
+        add_action('admin_enqueue_scripts', [self::class, 'maybeEnqueueKickoffScript']);
+    }
+
+    /**
+     * Enqueues the kickoff script when the active Backup needs client-side kickoff
+     *
+     * @return void
+     */
+    public static function maybeEnqueueKickoffScript(): void
+    {
+        // Cheap mode check first: server-side sites skip the Backup table query.
+        if (!self::isClientSideKickoffMode() || !self::isClientSideKickoffEnabled(true)) {
+            return;
         }
+
+        self::enqueueKickoffScript();
     }
 
     /**
@@ -525,11 +539,13 @@ class ClientSideKick
     /**
      * Check if client-side kickoff is enabled for the currently active package
      *
+     * @param bool $refresh If true, re-read the active package instead of using the request cache
+     *
      * @return bool True if there's an active package that requires client-side kickoff
      */
-    public static function isClientSideKickoffEnabled(): bool
+    public static function isClientSideKickoffEnabled(bool $refresh = false): bool
     {
-        $package = DupPackage::getNextActive();
+        $package = DupPackage::getNextActive($refresh);
         return $package !== null && $package->isClientSideKickoff();
     }
 
@@ -552,7 +568,7 @@ class ClientSideKick
             'client_call_frequency' => $callPeriodInMs,
         ];
 
-        wp_register_script('dupli-kick', DUPLICATOR_PLUGIN_URL . 'assets/js/dupli-kick.js', ['jquery'], DUPLICATOR_VERSION);
+        wp_register_script('dupli-kick', DUPLICATOR_PLUGIN_URL . 'assets/js/dupli-kick.js', [], DUPLICATOR_VERSION);
         wp_localize_script('dupli-kick', 'dupli_gateway', $gateway);
         DupLog::trace('KICKOFF: Client-side kickoff script enqueued (dupli-kick.js)');
         wp_enqueue_script('dupli-kick');
