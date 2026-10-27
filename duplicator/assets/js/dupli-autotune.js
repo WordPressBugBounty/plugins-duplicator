@@ -169,20 +169,9 @@
                 this.config.actions.start,
                 this.config.nonces.start,
                 {excludedValues: JSON.stringify(excludedValues)},
-                (session) => {
-                    this.render(session);
-                    this.ensureClientKickoff(session);
-                },
+                (session) => this.render(session),
                 true
             );
-        }
-
-        ensureClientKickoff(session) {
-            // In client-side kickoff mode the build is driven by dupli-kick.js, which is only
-            // enqueued on pages loaded while a Backup is active: reload to get it.
-            if (this.config.clientKickoff && session.isRunning && typeof DupliJs.kickme !== 'function') {
-                window.location.reload();
-            }
         }
 
         abort() {
