@@ -167,7 +167,7 @@ class PackInstaller extends AbstractJsonSerializable
      *
      * @return array<string,mixed>
      */
-    public function __serialize() // phpcs:ignore PHPCompatibility.FunctionNameRestrictions.NewMagicMethods.__serializeFound
+    public function __serialize()
     {
         $data = get_object_vars($this);
         foreach (['origFileManger', 'Package', 'configTransformer'] as $removeProp) {
@@ -629,6 +629,13 @@ HEADER;
             'sourcePath'  => DUPLICATOR____PATH . '/src/Libs/WpConfig',
             'archivePath' => 'dup-installer/libs/WpConfig',
             'id'          => 'lib-wpconfig',
+            'isArtifact'  => false,
+        ];
+
+        $result[] = [
+            'sourcePath'  => DUPLICATOR____PATH . '/src/Libs/SearchReplace',
+            'archivePath' => 'dup-installer/libs/SearchReplace',
+            'id'          => 'lib-searchreplace',
             'isArtifact'  => false,
         ];
 

@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-27T13:33:59+00:00\n"
+"POT-Creation-Date: 2026-11-03T12:11:31+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 3.0.0-alpha-01b1b10\n"
 "X-Domain: duplicator\n"
@@ -122,122 +122,122 @@ msgid ""
 "                    space available in the %1$s%3$s%2$s storage location."
 msgstr ""
 
-#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:56
-#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:223
+#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:57
+#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:236
 #: addons/dupcloudaddon/template/dupcloudaddon/configs/general_settings.php:23
 msgid "Duplicator Cloud"
 msgstr ""
 
-#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:155
-#: src/Models/Storages/AbstractStorageEntity.php:1462
+#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:168
+#: src/Models/Storages/AbstractStorageEntity.php:1482
 #, php-format
 msgid "Testing %s storage..."
 msgstr ""
 
-#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:159
-#: src/Models/Storages/AbstractStorageEntity.php:1466
+#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:172
+#: src/Models/Storages/AbstractStorageEntity.php:1486
 #, php-format
 msgid "Storage %s isn't supported on current server"
 msgstr ""
 
-#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:164
+#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:177
 msgid "Check if storage is ready to use."
 msgstr ""
 
-#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:169
+#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:182
 #, php-format
 msgid "Storage %1$s is not valid message %2$s"
 msgstr ""
 
-#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:176
-#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:177
+#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:189
+#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:190
 msgid "Storage test successful."
 msgstr ""
 
-#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:181
+#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:194
 #, php-format
 msgid "Error during storage test: %s"
 msgstr ""
 
-#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:261
+#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:274
 #: addons/dupcloudaddon/template/dupcloudaddon/connect/storage_auth.php:134
 msgid "Manage Backups"
 msgstr ""
 
-#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:279
+#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:292
 #: addons/dupcloudaddon/template/dupcloudaddon/connect/storage_auth.php:34
 msgid "Explore plans and features"
 msgstr ""
 
-#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:304
+#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:317
 msgid "Not connected."
 msgstr ""
 
-#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:376
+#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:394
 msgid "No access token provided"
 msgstr ""
 
-#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:446
+#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:468
 msgid "Error revoking authorization."
 msgstr ""
 
-#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:457
+#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:479
 msgid "Duplicator Cloud is disconnected successfully."
 msgstr ""
 
-#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:517
+#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:539
 msgid "Duplicator Cloud Storage was updated."
 msgstr ""
 
-#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:749
-#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:759
+#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:773
+#: addons/dupcloudaddon/src/Models/DupCloudStorage.php:783
 #: src/Package/AutoTune/AutoTuneDetector.php:506
 msgid "unknown"
 msgstr ""
 
-#: addons/dupcloudaddon/src/Utils/DupCloudClient.php:182
+#: addons/dupcloudaddon/src/Utils/DupCloudClient.php:194
 msgid "DupCloud rate limit hit for this URL. Please try again later."
 msgstr ""
 
-#: addons/dupcloudaddon/src/Utils/DupCloudClient.php:219
+#: addons/dupcloudaddon/src/Utils/DupCloudClient.php:235
 #, php-format
 msgid "Remote server error code: %s"
 msgstr ""
 
-#: addons/dupcloudaddon/src/Utils/DupCloudClient.php:228
+#: addons/dupcloudaddon/src/Utils/DupCloudClient.php:244
 msgid "Remote server error"
 msgstr ""
 
-#: addons/dupcloudaddon/src/Utils/DupCloudClient.php:235
+#: addons/dupcloudaddon/src/Utils/DupCloudClient.php:251
 #: src/Views/AutoTunePageData.php:562
 msgid "Success"
 msgstr ""
 
-#: addons/dupcloudaddon/src/Utils/DupCloudClient.php:956
+#: addons/dupcloudaddon/src/Utils/DupCloudClient.php:1072
 msgid "Invalid token format. Please ensure you copied the complete token."
 msgstr ""
 
-#: addons/dupcloudaddon/src/Utils/DupCloudClient.php:963
+#: addons/dupcloudaddon/src/Utils/DupCloudClient.php:1079
 msgid "Invalid token. Both license key and authentication token are required."
 msgstr ""
 
-#: addons/dupcloudaddon/src/Utils/DupCloudClient.php:1000
+#: addons/dupcloudaddon/src/Utils/DupCloudClient.php:1116
 msgid "Authentication succeeded but no storage token was provided."
 msgstr ""
 
-#: addons/dupcloudaddon/src/Utils/DupCloudStorageAdapter.php:113
+#: addons/dupcloudaddon/src/Utils/DupCloudStorageAdapter.php:116
 msgid "Remote storage connection failed"
 msgstr ""
 
-#: addons/dupcloudaddon/src/Utils/DupCloudStorageAdapter.php:116
+#: addons/dupcloudaddon/src/Utils/DupCloudStorageAdapter.php:119
 msgid "Storage configuration is invalid"
 msgstr ""
 
-#: addons/dupcloudaddon/src/Utils/DupCloudStorageAdapter.php:119
+#: addons/dupcloudaddon/src/Utils/DupCloudStorageAdapter.php:122
 msgid "Duplicator Cloud storage is inactive. Please check your license status."
 msgstr ""
 
-#: addons/dupcloudaddon/src/Utils/DupCloudStorageAdapter.php:122
+#: addons/dupcloudaddon/src/Utils/DupCloudStorageAdapter.php:125
 msgid "Storage is full"
 msgstr ""
 
@@ -1972,52 +1972,52 @@ msgstr[1] ""
 msgid "Error deleting logs: %s"
 msgstr ""
 
-#: src/Ajax/ServicesPackage.php:278
+#: src/Ajax/ServicesPackage.php:279
 #, php-format
 msgid ""
 "Error occurred. Error message: %1$s<br>\n"
 "Trace: %2$s"
 msgstr ""
 
-#: src/Ajax/ServicesPackage.php:369
-#: src/Ajax/ServicesPackage.php:683
-#: src/Ajax/ServicesPackage.php:710
-#: src/Ajax/ServicesPackage.php:754
-#: src/Ajax/ServicesPackage.php:900
-#: src/Ajax/ServicesPackage.php:996
+#: src/Ajax/ServicesPackage.php:370
+#: src/Ajax/ServicesPackage.php:692
+#: src/Ajax/ServicesPackage.php:719
+#: src/Ajax/ServicesPackage.php:763
+#: src/Ajax/ServicesPackage.php:909
+#: src/Ajax/ServicesPackage.php:1005
 msgid "Invalid request."
 msgstr ""
 
 #. translators: %s: Backup name
-#: src/Ajax/ServicesPackage.php:380
+#: src/Ajax/ServicesPackage.php:381
 #, php-format
 msgid "Backup %s cannot be deleted."
 msgstr ""
 
-#: src/Ajax/ServicesPackage.php:484
+#: src/Ajax/ServicesPackage.php:485
 msgid "Couldn't get Backup."
 msgstr ""
 
-#: src/Ajax/ServicesPackage.php:593
+#: src/Ajax/ServicesPackage.php:594
 #: src/Controllers/PackagesPageActions.php:91
 msgid "Backups cannot be removed while an AutoTune session is running."
 msgstr ""
 
-#: src/Ajax/ServicesPackage.php:700
+#: src/Ajax/ServicesPackage.php:709
 msgid "File type not supported."
 msgstr ""
 
-#: src/Ajax/ServicesPackage.php:704
+#: src/Ajax/ServicesPackage.php:713
 msgid "File doesn't exist"
 msgstr ""
 
-#: src/Ajax/ServicesPackage.php:763
+#: src/Ajax/ServicesPackage.php:772
 #, php-format
 msgid "Could not get Backup by ID %s"
 msgstr ""
 
-#: src/Ajax/ServicesPackage.php:790
-#: src/Ajax/ServicesPackage.php:796
+#: src/Ajax/ServicesPackage.php:799
+#: src/Ajax/ServicesPackage.php:805
 #: src/Models/ActivityLog/LogEventBackupCreate.php:459
 #: src/Models/ActivityLog/LogEventBackupCreate.php:506
 #: src/Package/PackageUtils.php:567
@@ -2030,7 +2030,7 @@ msgstr ""
 msgid "N/A"
 msgstr ""
 
-#: src/Ajax/ServicesPackage.php:804
+#: src/Ajax/ServicesPackage.php:813
 #: src/Models/ActivityLog/LogEventBackupCreate.php:406
 #: src/Models/ActivityLog/LogEventUnknown.php:27
 #: src/Models/Storages/UnknownStorage.php:80
@@ -2050,40 +2050,40 @@ msgstr ""
 msgid "Unknown"
 msgstr ""
 
-#: src/Ajax/ServicesPackage.php:829
+#: src/Ajax/ServicesPackage.php:838
 msgid "No Backup is building."
 msgstr ""
 
-#: src/Ajax/ServicesPackage.php:840
+#: src/Ajax/ServicesPackage.php:849
 msgid "Synchronizing with server..."
 msgstr ""
 
-#: src/Ajax/ServicesPackage.php:843
+#: src/Ajax/ServicesPackage.php:852
 msgid "Another Backup is presently running."
 msgstr ""
 
-#: src/Ajax/ServicesPackage.php:848
+#: src/Ajax/ServicesPackage.php:857
 msgid "Cancellation pending..."
 msgstr ""
 
-#: src/Ajax/ServicesPackage.php:914
+#: src/Ajax/ServicesPackage.php:923
 #, php-format
 msgid "Could not find Backup ID %d!"
 msgstr ""
 
-#: src/Ajax/ServicesPackage.php:1063
+#: src/Ajax/ServicesPackage.php:1072
 msgid "Invalid action."
 msgstr ""
 
-#: src/Ajax/ServicesPackage.php:1067
+#: src/Ajax/ServicesPackage.php:1076
 msgid "Invalid Backup ID."
 msgstr ""
 
-#: src/Ajax/ServicesPackage.php:1071
+#: src/Ajax/ServicesPackage.php:1080
 msgid "Backup already exists locally."
 msgstr ""
 
-#: src/Ajax/ServicesPackage.php:1096
+#: src/Ajax/ServicesPackage.php:1105
 msgid "Backup does not exist in any remote storage."
 msgstr ""
 
@@ -2690,14 +2690,14 @@ msgstr ""
 msgid "You do not have sufficient permissions to access this page."
 msgstr ""
 
-#: src/Core/Exceptions/DupliException.php:127
+#: src/Core/Exceptions/DupliException.php:128
 msgid ""
 "Your hosting account ran out of disk space or reached its storage quota.\n"
 "                Free up space by removing unneeded files or old backups, or contact your\n"
 "                hosting provider to increase the available space, then run the Backup again."
 msgstr ""
 
-#: src/Core/Exceptions/DupliException.php:150
+#: src/Core/Exceptions/DupliException.php:151
 msgid ""
 "A Backup file reached the maximum file size allowed by your hosting server.\n"
 "                This limit is part of the hosting configuration: contact your hosting provider to raise it,\n"
@@ -3898,148 +3898,148 @@ msgstr ""
 msgid ": single-thread"
 msgstr ""
 
-#: src/Models/Storages/AbstractStorageEntity.php:68
+#: src/Models/Storages/AbstractStorageEntity.php:69
 msgid "New Storage"
 msgstr ""
 
-#: src/Models/Storages/AbstractStorageEntity.php:411
+#: src/Models/Storages/AbstractStorageEntity.php:412
 msgid "Storage name is required."
 msgstr ""
 
-#: src/Models/Storages/AbstractStorageEntity.php:549
+#: src/Models/Storages/AbstractStorageEntity.php:550
 #, php-format
 msgid "The Storage %s is not supported on this server."
 msgstr ""
 
-#: src/Models/Storages/AbstractStorageEntity.php:630
+#: src/Models/Storages/AbstractStorageEntity.php:631
 msgid "Connect"
 msgstr ""
 
-#: src/Models/Storages/AbstractStorageEntity.php:1142
+#: src/Models/Storages/AbstractStorageEntity.php:1162
 #: template/admin_pages/storages/configs/local_default.php:25
 #: template/admin_pages/storages/storage_list.php:106
 #: template/parts/storage/select_list.php:32
 msgid "Location"
 msgstr ""
 
-#: src/Models/Storages/AbstractStorageEntity.php:1212
+#: src/Models/Storages/AbstractStorageEntity.php:1232
 #, php-format
 msgid "Transferring to %1$s folder:<br/> <i>%2$s</i>"
 msgstr ""
 
-#: src/Models/Storages/AbstractStorageEntity.php:1218
+#: src/Models/Storages/AbstractStorageEntity.php:1238
 #, php-format
 msgid "Transfer to %1$s folder %2$s is pending"
 msgstr ""
 
-#: src/Models/Storages/AbstractStorageEntity.php:1224
+#: src/Models/Storages/AbstractStorageEntity.php:1244
 #, php-format
 msgid "Failed to transfer to %1$s folder %2$s"
 msgstr ""
 
-#: src/Models/Storages/AbstractStorageEntity.php:1230
+#: src/Models/Storages/AbstractStorageEntity.php:1250
 #, php-format
 msgid "Cancelled before it could transfer to %1$s folder %2$s"
 msgstr ""
 
-#: src/Models/Storages/AbstractStorageEntity.php:1236
+#: src/Models/Storages/AbstractStorageEntity.php:1256
 #, php-format
 msgid "Transferred Backup to %1$s folder %2$s"
 msgstr ""
 
-#: src/Models/Storages/AbstractStorageEntity.php:1261
+#: src/Models/Storages/AbstractStorageEntity.php:1281
 #, php-format
 msgid "Downloading from %1$s folder:<br/> <i>%2$s</i>"
 msgstr ""
 
-#: src/Models/Storages/AbstractStorageEntity.php:1267
+#: src/Models/Storages/AbstractStorageEntity.php:1287
 #, php-format
 msgid "Download from %1$s folder %2$s is pending"
 msgstr ""
 
-#: src/Models/Storages/AbstractStorageEntity.php:1273
+#: src/Models/Storages/AbstractStorageEntity.php:1293
 #, php-format
 msgid "Failed to download from %1$s folder %2$s"
 msgstr ""
 
-#: src/Models/Storages/AbstractStorageEntity.php:1279
+#: src/Models/Storages/AbstractStorageEntity.php:1299
 #, php-format
 msgid "Cancelled before it could download from %1$s folder %2$s"
 msgstr ""
 
-#: src/Models/Storages/AbstractStorageEntity.php:1285
+#: src/Models/Storages/AbstractStorageEntity.php:1305
 #, php-format
 msgid "Downloaded Backup from %1$s folder %2$s"
 msgstr ""
 
-#: src/Models/Storages/AbstractStorageEntity.php:1471
+#: src/Models/Storages/AbstractStorageEntity.php:1491
 #, php-format
 msgid "Storage %s config data isn't valid"
 msgstr ""
 
-#: src/Models/Storages/AbstractStorageEntity.php:1487
-#: src/Models/Storages/AbstractStorageEntity.php:1512
+#: src/Models/Storages/AbstractStorageEntity.php:1507
+#: src/Models/Storages/AbstractStorageEntity.php:1532
 #, php-format
 msgid "Checking if the temporary file exists \"%1$s\"..."
 msgstr ""
 
-#: src/Models/Storages/AbstractStorageEntity.php:1489
+#: src/Models/Storages/AbstractStorageEntity.php:1509
 #, php-format
 msgid "File with the temporary file name already exists, please try again \"%1$s\""
 msgstr ""
 
-#: src/Models/Storages/AbstractStorageEntity.php:1493
+#: src/Models/Storages/AbstractStorageEntity.php:1513
 msgid "File with the temporary file name already exists, please try again"
 msgstr ""
 
-#: src/Models/Storages/AbstractStorageEntity.php:1497
+#: src/Models/Storages/AbstractStorageEntity.php:1517
 #, php-format
 msgid "Creating temporary file \"%1$s\"..."
 msgstr ""
 
-#: src/Models/Storages/AbstractStorageEntity.php:1500
+#: src/Models/Storages/AbstractStorageEntity.php:1520
 msgid "There was a problem when storing the temporary file"
 msgstr ""
 
-#: src/Models/Storages/AbstractStorageEntity.php:1506
-#: src/Models/Storages/AbstractStorageEntity.php:1529
+#: src/Models/Storages/AbstractStorageEntity.php:1526
+#: src/Models/Storages/AbstractStorageEntity.php:1549
 #, php-format
 msgid "Reason: %s"
 msgstr ""
 
-#: src/Models/Storages/AbstractStorageEntity.php:1508
+#: src/Models/Storages/AbstractStorageEntity.php:1528
 msgid "There was a problem storing the temporary file"
 msgstr ""
 
-#: src/Models/Storages/AbstractStorageEntity.php:1514
+#: src/Models/Storages/AbstractStorageEntity.php:1534
 #, php-format
 msgid "The temporary file was not found \"%1$s\""
 msgstr ""
 
-#: src/Models/Storages/AbstractStorageEntity.php:1518
+#: src/Models/Storages/AbstractStorageEntity.php:1538
 msgid "The temporary file was not found"
 msgstr ""
 
-#: src/Models/Storages/AbstractStorageEntity.php:1522
+#: src/Models/Storages/AbstractStorageEntity.php:1542
 #, php-format
 msgid "Deleting temporary file \"%1$s\"..."
 msgstr ""
 
-#: src/Models/Storages/AbstractStorageEntity.php:1524
+#: src/Models/Storages/AbstractStorageEntity.php:1544
 #, php-format
 msgid "There was a problem when deleting the temporary file \"%1$s\""
 msgstr ""
 
-#: src/Models/Storages/AbstractStorageEntity.php:1531
+#: src/Models/Storages/AbstractStorageEntity.php:1551
 msgid "There was a problem deleting the temporary file"
 msgstr ""
 
-#: src/Models/Storages/AbstractStorageEntity.php:1535
-#: src/Models/Storages/AbstractStorageEntity.php:1536
+#: src/Models/Storages/AbstractStorageEntity.php:1555
+#: src/Models/Storages/AbstractStorageEntity.php:1556
 msgid "Successfully stored and deleted file"
 msgstr ""
 
-#: src/Models/Storages/AbstractStorageEntity.php:1595
+#: src/Models/Storages/AbstractStorageEntity.php:1615
 #: src/Models/TemplateEntity.php:391
 #, php-format
 msgid "%1$s - Copy"
@@ -4181,33 +4181,33 @@ msgstr ""
 msgid "Invalid storage configuration"
 msgstr ""
 
-#: src/Models/Storages/TransferFailureHandler.php:38
+#: src/Models/Storages/TransferFailureHandler.php:42
 msgid "There was a problem downloading the backup from one of the configured storages."
 msgstr ""
 
-#: src/Models/Storages/TransferFailureHandler.php:39
+#: src/Models/Storages/TransferFailureHandler.php:43
 msgid "There was a problem uploading the backup to one of the configured storages."
 msgstr ""
 
-#: src/Models/Storages/TransferFailureHandler.php:42
+#: src/Models/Storages/TransferFailureHandler.php:46
 #, php-format
 msgctxt "1: storage name, 2: storage type name"
 msgid "There was a problem downloading the backup from the storage %1$s (%2$s)."
 msgstr ""
 
-#: src/Models/Storages/TransferFailureHandler.php:47
+#: src/Models/Storages/TransferFailureHandler.php:51
 #, php-format
 msgctxt "1: storage name, 2: storage type name"
 msgid "There was a problem uploading the backup to the storage %1$s (%2$s)."
 msgstr ""
 
-#: src/Models/Storages/TransferFailureHandler.php:60
+#: src/Models/Storages/TransferFailureHandler.php:63
 msgid ""
 "Check the storage configuration, credentials and available space,\n"
-"                        then run the transfer again."
+"                    then run the transfer again."
 msgstr ""
 
-#: src/Models/Storages/TransferFailureHandler.php:66
+#: src/Models/Storages/TransferFailureHandler.php:69
 msgid "Backup Transfer Failed"
 msgstr ""
 
@@ -4262,7 +4262,7 @@ msgid ""
 "                        Please remove the value from the Archive > Files Tab > Files input box and apply only valid file names."
 msgstr ""
 
-#: src/Package/AbstractPackage.php:910
+#: src/Package/AbstractPackage.php:907
 #, php-format
 msgid "MySQL Server Host: <b>%1$s</b> isn't a valid host"
 msgstr ""
@@ -4271,7 +4271,7 @@ msgstr ""
 #: src/Package/AbstractPackageDeployer.php:214
 #: src/Package/AbstractPackageDeployer.php:296
 #: src/Package/AbstractPackageDeployer.php:1204
-#: src/Utils/ZipArchiveExtended.php:416
+#: src/Utils/ZipArchiveExtended.php:415
 msgid "ZipArchive PHP module is not installed/enabled. The current Backup cannot be opened."
 msgstr ""
 
@@ -5275,66 +5275,66 @@ msgstr ""
 msgid "Could not realign the backup archive during chunk recovery."
 msgstr ""
 
-#: src/Package/Create/PackInstaller.php:747
+#: src/Package/Create/PackInstaller.php:754
 msgid "An installer file to add to the archive is missing or not readable. Check the backup log for details."
 msgstr ""
 
-#: src/Package/Create/PackInstaller.php:980
+#: src/Package/Create/PackInstaller.php:987
 msgid "The backup failed while adding the installer files to the archive. Check the backup log for details."
 msgstr ""
 
-#: src/Package/Create/PackInstaller.php:1087
+#: src/Package/Create/PackInstaller.php:1094
 msgid "The backup archive is missing or empty, the installer files cannot be added. Check the backup log for details."
 msgstr ""
 
-#: src/Package/Create/PackInstaller.php:1145
+#: src/Package/Create/PackInstaller.php:1152
 msgid "Could not open the archive file to add the installer files."
 msgstr ""
 
-#: src/Package/Create/PackInstaller.php:1165
+#: src/Package/Create/PackInstaller.php:1172
 msgid "Could not finalize the archive file after adding the installer files."
 msgstr ""
 
-#: src/Package/Create/PackInstaller.php:1193
+#: src/Package/Create/PackInstaller.php:1200
 msgid "ARCHIVE CONSISTENCY TEST: PASS"
 msgstr ""
 
-#: src/Package/Create/PackInstaller.php:1199
+#: src/Package/Create/PackInstaller.php:1206
 msgid ""
 "It was not possible to double-check that the installer files are inside the archive.\n"
 "                        No action is needed; to be extra safe, you can test the Backup with a restore."
 msgstr ""
 
-#: src/Package/Create/PackInstaller.php:1207
+#: src/Package/Create/PackInstaller.php:1214
 msgid "ARCHIVE CONSISTENCY TEST: FAIL"
 msgstr ""
 
-#: src/Package/Create/PackInstaller.php:1214
+#: src/Package/Create/PackInstaller.php:1221
 msgid "One or more installer files were not found in the archive. Check the backup log for details."
 msgstr ""
 
-#: src/Package/Create/PackInstaller.php:1220
+#: src/Package/Create/PackInstaller.php:1227
 msgid "Archive doesn't pass consistency check."
 msgstr ""
 
-#: src/Package/Create/PackInstaller.php:1239
+#: src/Package/Create/PackInstaller.php:1246
 msgid "Could not clean the temporary folder for the installer files."
 msgstr ""
 
-#: src/Package/Create/PackInstaller.php:1247
-#: src/Package/Create/PackInstaller.php:1259
+#: src/Package/Create/PackInstaller.php:1254
+#: src/Package/Create/PackInstaller.php:1266
 msgid "Could not create the temporary folder for the installer files."
 msgstr ""
 
-#: src/Package/Create/PackInstaller.php:1272
+#: src/Package/Create/PackInstaller.php:1279
 msgid "Could not copy an installer file to the temporary folder."
 msgstr ""
 
-#: src/Package/Create/PackInstaller.php:1318
+#: src/Package/Create/PackInstaller.php:1325
 msgid "The shell zip command failed while adding the installer files to the archive."
 msgstr ""
 
-#: src/Package/Create/PackInstaller.php:1499
+#: src/Package/Create/PackInstaller.php:1506
 msgid "The backup failed while writing an installer file. Check the backup log for details."
 msgstr ""
 
@@ -5706,7 +5706,7 @@ msgstr ""
 msgid "Click to increase the Max Build Time to %d minutes."
 msgstr ""
 
-#: src/Package/Failure/LiteSpeedWorkerGuidance.php:63
+#: src/Package/Failure/LiteSpeedWorkerGuidance.php:64
 msgid ""
 "LiteSpeed was detected. This failure may have been caused by LiteSpeed terminating a background worker\n"
 "            after its AJAX connection closed. The configuration below is only a potential solution. It is not guaranteed\n"
@@ -5714,7 +5714,7 @@ msgid ""
 msgstr ""
 
 #. translators: %s: Absolute path to the root .htaccess file
-#: src/Package/Failure/LiteSpeedWorkerGuidance.php:76
+#: src/Package/Failure/LiteSpeedWorkerGuidance.php:77
 #, php-format
 msgid ""
 "Add the suggested configuration to the root <code>.htaccess</code> file at <code>%s</code>, or ask\n"
@@ -5722,14 +5722,14 @@ msgid ""
 "                not modify this file automatically."
 msgstr ""
 
-#: src/Package/Failure/LiteSpeedWorkerGuidance.php:84
+#: src/Package/Failure/LiteSpeedWorkerGuidance.php:85
 msgid ""
 "Duplicator cannot verify an equivalent configuration defined outside the local\n"
 "            <code>.htaccess</code> file. After the configuration has been reviewed, run the Backup again. If the\n"
 "            failure continues, check the Backup log because the interruption may have another cause."
 msgstr ""
 
-#: src/Package/Failure/LiteSpeedWorkerGuidance.php:97
+#: src/Package/Failure/LiteSpeedWorkerGuidance.php:98
 msgid "Troubleshooting Server Time Out Issues"
 msgstr ""
 
@@ -6616,7 +6616,7 @@ msgstr ""
 msgid "A Duplicator backup is in progress. WordPress updates are temporarily blocked to prevent backup corruption. Try again in a few minutes."
 msgstr ""
 
-#: src/Utils/ZipArchiveExtended.php:425
+#: src/Utils/ZipArchiveExtended.php:424
 msgid "Cannot open the Backup archive file."
 msgstr ""
 
@@ -10254,7 +10254,9 @@ msgid "Use IPv4 only"
 msgstr ""
 
 #: template/admin_pages/settings/storage/storage_ssl.php:87
-msgid "To use IPv4 only, which can help if your host has a broken IPv6 setup (currently only supported by Google Drive)"
+msgid ""
+"To use IPv4 only, which can help if your host has a broken IPv6 setup\n"
+"            (supported by Duplicator Cloud, Amazon S3 and S3-compatible storages, Dropbox and Google Drive)"
 msgstr ""
 
 #: template/admin_pages/storages/configs/local.php:30

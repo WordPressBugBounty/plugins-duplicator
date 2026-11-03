@@ -16,6 +16,7 @@ use Duplicator\Core\Controllers\ControllersManager;
 use Duplicator\Core\Exceptions\DupliException;
 use Duplicator\Core\Views\TplMng;
 use Duplicator\Libs\Snap\SnapNet;
+use Duplicator\Libs\Snap\SnapServer;
 use Duplicator\Libs\Snap\SnapUtil;
 use Duplicator\Libs\Snap\SnapWP;
 use Duplicator\Models\Storages\AbstractStorageEntity;
@@ -639,6 +640,14 @@ class ServicesPackage extends AbstractAjaxService
             exit();
         }
         DupLog::trace("Process worker request");
+        // LiteSpeed kills a worker some seconds after its loopback caller disconnects; an ended
+        // response avoids that. In client-side kickoff the browser waits, so nothing kills the worker.
+        if (!ClientSideKick::isClientSideKickoffMode() && SnapServer::canLiteSpeedEndResponseEarly()) {
+            SnapUtil::obCleanAll(false);
+            echo 'ok';
+            SnapServer::liteSpeedFinishRequest();
+            DupLog::trace("Worker response ended before processing");
+        }
         Runner::process();
         DupLog::trace("Exiting process worker request");
 

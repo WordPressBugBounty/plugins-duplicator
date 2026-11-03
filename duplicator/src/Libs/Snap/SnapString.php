@@ -354,4 +354,25 @@ class SnapString
             |\xF4[\x80-\x8F][\x80-\xBF]{2}    # plane 16
             )+%xs', $string) === 1);
     }
+
+    /**
+     * Decodes a string only when it is entirely valid base64 that encodes back to itself
+     *
+     * @param string $string The string to decode
+     *
+     * @return ?string decoded string, null if the string is not base64
+     */
+    public static function decodeBase64(string $string): ?string
+    {
+        if (preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $string) !== 1) {
+            return null;
+        }
+
+        $decoded = base64_decode($string, true);
+        if ($decoded === false || base64_encode($decoded) !== $string) {
+            return null;
+        }
+
+        return $decoded;
+    }
 }

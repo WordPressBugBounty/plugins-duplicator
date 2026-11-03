@@ -25,6 +25,7 @@ use Duplicator\Utils\Settings\ModelMigrateSettingsInterface;
 use Duplicator\Package\Storage\StorageTransferChunkFiles;
 use Exception;
 use Duplicator\Core\Exceptions\DupliException;
+use Duplicator\Core\Exceptions\StorageTransferAbortException;
 use Throwable;
 use ReflectionClass;
 use VendorDuplicator\Amk\JsonSerialize\JsonSerialize;
@@ -802,7 +803,7 @@ abstract class AbstractStorageEntity extends AbstractEntity implements ModelMigr
             case StorageTransferChunkFiles::CHUNK_ERROR:
             default:
                 DupLog::infoTrace('Local upload in chunks, upload error: ' . $storageUpload->getLastErrorMessage());
-                $upload_info->increaseFailureCount($storageUpload->getFailure());
+                $this->handleChunkFailure($upload_info, $storageUpload->getFailure());
         }
         $package->update();
     }
@@ -907,9 +908,28 @@ abstract class AbstractStorageEntity extends AbstractEntity implements ModelMigr
             case StorageTransferChunkFiles::CHUNK_ERROR:
             default:
                 DupLog::infoTrace('Local download in chunks, download error: ' . $storageDownload->getLastErrorMessage());
-                $upload_info->increaseFailureCount($storageDownload->getFailure());
+                $this->handleChunkFailure($upload_info, $storageDownload->getFailure());
         }
         $package->update();
+    }
+
+    /**
+     * Count a failed chunk towards the retry limit, or fail the transfer at once when the adapter aborted it
+     *
+     * @param UploadInfo $upload_info the upload info
+     * @param ?Throwable $failure     the exception the chunk threw, null when it only returned false
+     *
+     * @return void
+     */
+    private function handleChunkFailure(UploadInfo $upload_info, ?Throwable $failure): void
+    {
+        if ($failure instanceof StorageTransferAbortException) {
+            DupLog::infoTrace("Transfer aborted without retry [Storage Id: $this->id]");
+            $upload_info->uploadFailed($failure);
+            return;
+        }
+
+        $upload_info->increaseFailureCount($failure);
     }
 
     /**
