@@ -159,13 +159,13 @@ final class DUPX_Ctrl_ajax
     }
 
     /**
-     * ajax actions
+     * Run an installer action, for the AJAX controller and the command line installer
      *
      * @param string $action action name
      *
      * @return mixed
      */
-    protected static function actions(?string $action)
+    public static function actions(?string $action)
     {
         $actionData = null;
 

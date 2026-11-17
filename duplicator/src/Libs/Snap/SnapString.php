@@ -334,6 +334,18 @@ class SnapString
     }
 
     /**
+     * Join a string wrapped across source lines into one line, collapsing whitespace runs to single spaces.
+     *
+     * @param string $text Text to join
+     *
+     * @return string
+     */
+    public static function oneLine(string $text): string
+    {
+        return trim((string) preg_replace('/\s+/', ' ', $text));
+    }
+
+    /**
      * Returns true if the string contains UTF8 characters
      *
      * @see http://php.net/manual/en/function.mb-detect-encoding.php

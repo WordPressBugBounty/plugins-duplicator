@@ -12,7 +12,7 @@ if (!defined('DUPXABSPATH')) {
 use Duplicator\Installer\Core\Bootstrap;
 use Duplicator\Installer\Core\Security;
 
-define('DUPX_VERSION', '5.1.1');
+define('DUPX_VERSION', '5.2.0');
 define('DUPX_INIT', str_replace('\\', '/', dirname(__DIR__)));
 define('DUPX_ROOT', preg_match('/^[\\\\\/]?$/', dirname(DUPX_INIT)) ? '/' : dirname(DUPX_INIT));
 

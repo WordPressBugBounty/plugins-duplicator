@@ -2,6 +2,7 @@
 
 namespace Duplicator\Installer\Bootstrap;
 
+use Duplicator\Installer\Cli\CliEnvironment;
 use Duplicator\Installer\Utils\SecureCsrf;
 use Duplicator\Libs\DupArchive\DupArchive;
 use Duplicator\Libs\DupArchive\DupArchiveExpandBasicEngine;
@@ -1379,7 +1380,8 @@ class BootstrapRunner
      */
     private function getArchiveFilePath()
     {
-        if (($archiveInput = filter_input(INPUT_GET, 'archive', FILTER_SANITIZE_SPECIAL_CHARS)) != false) {
+        $archiveInput = CliEnvironment::getArchiveLocation() ?? filter_input(INPUT_GET, 'archive', FILTER_SANITIZE_SPECIAL_CHARS);
+        if ($archiveInput != false) {
             // The parameter provides only the archive location; the file name always
             // comes from the embedded ARCHIVE_FILENAME constant, never from the request.
             $archiveDir       = is_dir($archiveInput) ? $archiveInput : dirname($archiveInput);
